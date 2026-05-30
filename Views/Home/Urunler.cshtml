@@ -1,0 +1,527 @@
+@{
+    ViewData["Title"] = "Ürün Koleksiyonu";
+}
+
+@section Scripts {
+    <style>
+        /* ---- Bu sayfaya özel stiller ---- */
+        .filtre-cubugu {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 30px 0 40px;
+        }
+
+        .filtre-btn {
+            font-family: var(--font-metin);
+            font-size: 0.68rem;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            padding: 9px 22px;
+            border: 1px solid #d4c9a8;
+            background: transparent;
+            color: var(--gri);
+            cursor: pointer;
+            transition: var(--gecis);
+        }
+
+        .filtre-btn:hover,
+        .filtre-btn.aktif {
+            background: var(--siyah);
+            border-color: var(--siyah);
+            color: var(--altin);
+        }
+
+        /* ---- ÜRÜN KARTLARI (Gelişmiş hover efekti) ---- */
+        .urun-kart-wrapper {
+            overflow: hidden;
+            position: relative;
+            background: var(--beyaz);
+            border: 1px solid #e8e0d0;
+            transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.3s ease;
+            margin-bottom: 30px;
+        }
+
+        .urun-kart-wrapper:hover {
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.14), 0 0 0 1px var(--altin);
+            border-color: var(--altin);
+        }
+
+        .urun-kart-gorsel {
+            position: relative;
+            height: 280px;
+            overflow: hidden;
+            background: #f5edd8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .urun-kart-gorsel .emoji-gorsel {
+            font-size: 6rem;
+            transition: transform 0.5s ease;
+            user-select: none;
+        }
+
+        .urun-kart-wrapper:hover .emoji-gorsel {
+            transform: scale(1.12) rotate(-3deg);
+        }
+
+        .urun-rozet {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            background: var(--siyah);
+            color: var(--altin);
+            font-size: 0.6rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 5px 10px;
+        }
+
+        .urun-rozet-yeni {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background: var(--altin);
+            color: var(--siyah);
+            font-size: 0.6rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 5px 10px;
+            font-weight: 700;
+        }
+
+        .urun-kart-gorsel .overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(10,10,10,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .urun-kart-wrapper:hover .overlay {
+            opacity: 1;
+        }
+
+        .overlay .hizli-incele {
+            background: transparent;
+            border: 1px solid var(--altin);
+            color: var(--altin);
+            font-family: var(--font-metin);
+            font-size: 0.65rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            padding: 10px 22px;
+            text-decoration: none;
+            transform: translateY(10px);
+            transition: all 0.3s ease 0.1s;
+        }
+
+        .urun-kart-wrapper:hover .overlay .hizli-incele {
+            transform: translateY(0);
+        }
+
+        .overlay .hizli-incele:hover {
+            background: var(--altin);
+            color: var(--siyah);
+        }
+
+        .urun-kart-bilgi {
+            padding: 20px 22px;
+            border-top: 1px solid #f0ebe0;
+        }
+
+        .urun-kart-bilgi .kategori {
+            font-size: 0.62rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--altin);
+            margin-bottom: 5px;
+        }
+
+        .urun-kart-bilgi .isim {
+            font-family: var(--font-baslik);
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--siyah);
+            margin-bottom: 4px;
+            line-height: 1.3;
+        }
+
+        .urun-kart-bilgi .aciklama {
+            font-size: 0.78rem;
+            color: var(--gri);
+            margin-bottom: 14px;
+        }
+
+        .urun-kart-bilgi .alt-satir {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .urun-kart-bilgi .fiyat {
+            font-family: var(--font-baslik);
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--altin-koyu);
+        }
+
+        .btn-detay {
+            font-family: var(--font-metin);
+            font-size: 0.62rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 8px 18px;
+            border: 1px solid var(--siyah);
+            background: transparent;
+            color: var(--siyah);
+            text-decoration: none;
+            transition: var(--gecis);
+            display: inline-block;
+        }
+
+        .btn-detay:hover {
+            background: var(--siyah);
+            color: var(--altin);
+        }
+
+        .sonuc-etiketi {
+            font-size: 0.75rem;
+            color: var(--gri);
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+    </style>
+
+    <script>
+        // ================================================
+        // KATEGORİ FİLTRELEME
+        // ================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            const filtreButonlari = document.querySelectorAll('.filtre-btn');
+            const urunKartlari    = document.querySelectorAll('.urun-oget');
+            const sonucEtiketi    = document.getElementById('sonucSayisi');
+
+            filtreButonlari.forEach(function(buton) {
+                buton.addEventListener('click', function() {
+                    filtreButonlari.forEach(b => b.classList.remove('aktif'));
+                    this.classList.add('aktif');
+
+                    var seciliFiltre = this.getAttribute('data-filtre');
+                    var gorünürSayisi = 0;
+
+                    urunKartlari.forEach(function(kart) {
+                        var kartKategori = kart.getAttribute('data-kategori');
+
+                        if (seciliFiltre === 'tumu' || kartKategori === seciliFiltre) {
+                            kart.style.display = 'block';
+                            kart.style.opacity = '0';
+                            kart.style.transform = 'translateY(16px)';
+                            setTimeout(function() {
+                                kart.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+                                kart.style.opacity = '1';
+                                kart.style.transform = 'translateY(0)';
+                            }, 50);
+                            gorünürSayisi++;
+                        } else {
+                            kart.style.display = 'none';
+                        }
+                    });
+
+                    sonucEtiketi.textContent = gorünürSayisi + ' ürün listeleniyor';
+                });
+            });
+        });
+    </script>
+}
+
+<div class="page-header-band">
+    <p class="bolum-alt-yazi" style="color:#444;">El İşçiliği &amp; Zarafet</p>
+    <h1>Ürün Koleksiyonu</h1>
+    <div class="altin-cizgi"></div>
+    <p>Her parça, özenle seçilmiş altın ve ustaca işlenmiş bir eser</p>
+</div>
+
+<main style="background:var(--krem);padding:50px 0 70px;">
+    <div class="container">
+
+        <div class="filtre-cubugu" id="filtreGrubu">
+            <button class="filtre-btn aktif" data-filtre="tumu">Tümü</button>
+            <button class="filtre-btn" data-filtre="bilezik">Bilezikler</button>
+            <button class="filtre-btn" data-filtre="yuzuk">Yüzükler</button>
+            <button class="filtre-btn" data-filtre="kolye">Kolyeler</button>
+            <button class="filtre-btn" data-filtre="kupe">Küpeler</button>
+            <button class="filtre-btn" data-filtre="set">Setler</button>
+        </div>
+
+        <p class="sonuc-etiketi text-center" id="sonucSayisi">12 ürün listeleniyor</p>
+
+        <div class="row" id="urunIzgarasi">
+
+            <div class="col-sm-6 col-lg-4 urun-oget fade-in-up delay-1" data-kategori="bilezik">
+                <div class="urun-kart-wrapper">
+                    <div class="urun-kart-gorsel" style="background:linear-gradient(135deg,#f5edd8,#e8d08a);">
+                        <span class="urun-rozet">Bilezik</span>
+                        <span class="urun-rozet-yeni">Çok Satan</span>
+                        <img src="/img/urunler/3.jpg" style="width: 100%; height: 100%; object-fit: cover;" alt="Burma Bilezik" />
+                        <div class="overlay">
+                            <a asp-controller="Home" asp-action="Detay" asp-route-id="3" class="hizli-incele">Hızlı İncele</a>
+                        </div>
+                    </div>
+                    <div class="urun-kart-bilgi">
+                        <p class="kategori">Bilezik</p>
+                        <h3 class="isim">Burma Bilezik</h3>
+                        <p class="aciklama">22 Ayar · 7.2 gr · El işi örgü desen</p>
+                        <div class="alt-satir">
+                            <span class="fiyat">27.648 TL</span>
+                            <a asp-controller="Home" asp-action="Detay" asp-route-id="3" class="btn-detay">Detayları İncele</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-4 urun-oget fade-in-up delay-2" data-kategori="bilezik">
+                <div class="urun-kart-wrapper">
+                    <div class="urun-kart-gorsel" style="background:linear-gradient(135deg,#fffbf0,#c9a84c30);">
+                        <span class="urun-rozet">Bilezik</span>
+                        <img src="/img/urunler/6.jpg" style="width: 100%; height: 100%; object-fit: cover;" alt="Hasır Bilezik" />
+                        <div class="overlay">
+                            <a asp-controller="Home" asp-action="Detay" asp-route-id="6" class="hizli-incele">Hızlı İncele</a>
+                        </div>
+                    </div>
+                    <div class="urun-kart-bilgi">
+                        <p class="kategori">Bilezik</p>
+                        <h3 class="isim">Hasır Bilezik</h3>
+                        <p class="aciklama">22 Ayar · 9.5 gr · Düz hasır desen</p>
+                        <div class="alt-satir">
+                            <span class="fiyat">36.464 TL</span>
+                            <a asp-controller="Home" asp-action="Detay" asp-route-id="6" class="btn-detay">Detayları İncele</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-4 urun-oget fade-in-up delay-2" data-kategori="bilezik">
+                <div class="urun-kart-wrapper">
+                    <div class="urun-kart-gorsel" style="background:linear-gradient(135deg,#f8f5ec,#d4c580);">
+                        <span class="urun-rozet">Bilezik</span>
+                        <img src="/img/urunler/8.jpg" style="width: 100%; height: 100%; object-fit: cover;" alt="Omega Bilezik" />
+                        <div class="overlay">
+                            <a asp-controller="Home" asp-action="Detay" asp-route-id="8" class="hizli-incele">Hızlı İncele</a>
+                        </div>
+                    </div>
+                    <div class="urun-kart-bilgi">
+                        <p class="kategori">Bilezik</p>
+                        <h3 class="isim">Omega Bilezik</h3>
+                        <p class="aciklama">14 Ayar · 6.8 gr · Geniş omega zincir</p>
+                        <div class="alt-satir">
+                            <span class="fiyat">23.986 TL</span>
+                            <a asp-controller="Home" asp-action="Detay" asp-route-id="8" class="btn-detay">Detayları İncele</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-4 urun-oget fade-in-up delay-3" data-kategori="yuzuk">
+                <div class="urun-kart-wrapper">
+                    <div class="urun-kart-gorsel" style="background:linear-gradient(135deg,#f0f0f8,#d4c9a8);">
+                        <span class="urun-rozet">Yüzük</span>
+                        <span class="urun-rozet-yeni">Yeni</span>
+                        <img src="/img/urunler/11.jpg" style="width: 100%; height: 100%; object-fit: cover;" alt="Solitaire Pırlanta" />
+                        <div class="overlay">
+                            <a asp-controller="Home" asp-action="Detay" asp-route-id="11" class="hizli-incele">Hızlı İncele</a>
+                        </div>
+                    </div>
+                    <div class="urun-kart-bilgi">
+                        <p class="kategori">Yüzük</p>
+                        <h3 class="isim">Solitaire Pırlanta</h3>
+                        <p class="aciklama">14 Ayar · 0.50 ct · Teksir kesim</p>
+                        <div class="alt-satir">
+                            <span class="fiyat">48.500 TL</span>
+                            <a asp-controller="Home" asp-action="Detay" asp-route-id="11" class="btn-detay">Detayları İncele</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-4 urun-oget fade-in-up delay-1" data-kategori="yuzuk">
+                <div class="urun-kart-wrapper">
+                    <div class="urun-kart-gorsel" style="background:linear-gradient(135deg,#fafafa,#e0d8c8);">
+                        <span class="urun-rozet">Alyans</span>
+                        <img src="/img/urunler/1.jpg" style="width: 100%; height: 100%; object-fit: cover;" alt="Klasik Alyans Seti" />
+                        <div class="overlay">
+                            <a asp-controller="Home" asp-action="Detay" asp-route-id="1" class="hizli-incele">Hızlı İncele</a>
+                        </div>
+                    </div>
+                    <div class="urun-kart-bilgi">
+                        <p class="kategori">Alyans</p>
+                        <h3 class="isim">Klasik Alyans Seti</h3>
+                        <p class="aciklama">14 Ayar · 2×3.2 gr · Düz yüzey</p>
+                        <div class="alt-satir">
+                            <span class="fiyat">14.272 TL</span>
+                            <a asp-controller="Home" asp-action="Detay" asp-route-id="1" class="btn-detay">Detayları İncele</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-4 urun-oget fade-in-up delay-2" data-kategori="kolye">
+                <div class="urun-kart-wrapper">
+                    <div class="urun-kart-gorsel" style="background:linear-gradient(135deg,#fffbf0,#e8d08a50);">
+                        <span class="urun-rozet">Kolye</span>
+                        <img src="/img/urunler/12.jpg" style="width: 100%; height: 100%; object-fit: cover;" alt="Venezia Zincir Kolye" />
+                        <div class="overlay">
+                            <a asp-controller="Home" asp-action="Detay" asp-route-id="12" class="hizli-incele">Hızlı İncele</a>
+                        </div>
+                    </div>
+                    <div class="urun-kart-bilgi">
+                        <p class="kategori">Kolye</p>
+                        <h3 class="isim">Venezia Zincir</h3>
+                        <p class="aciklama">22 Ayar · 5.4 gr · 45 cm</p>
+                        <div class="alt-satir">
+                            <span class="fiyat">18.965 TL</span>
+                            <a asp-controller="Home" asp-action="Detay" asp-route-id="12" class="btn-detay">Detayları İncele</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-4 urun-oget fade-in-up delay-3" data-kategori="kolye">
+                <div class="urun-kart-wrapper">
+                    <div class="urun-kart-gorsel" style="background:linear-gradient(135deg,#fff0f5,#f5d0d8);">
+                        <span class="urun-rozet">Kolye</span>
+                        <span class="urun-rozet-yeni">Sevgiliye</span>
+                       <img src="/img/urunler/7.jpg" style="width: 100%; height: 100%; object-fit: cover;" alt="Kalp Kolye" />
+                        <div class="overlay">
+                            <a asp-controller="Home" asp-action="Detay" asp-route-id="7" class="hizli-incele">Hızlı İncele</a>
+                        </div>
+                    </div>
+                    <div class="urun-kart-bilgi">
+                        <p class="kategori">Kolye</p>
+                        <h3 class="isim">Kalp Kolye</h3>
+                        <p class="aciklama">14 Ayar · 2.8 gr · Kalpli uç</p>
+                        <div class="alt-satir">
+                            <span class="fiyat">9.826 TL</span>
+                            <a asp-controller="Home" asp-action="Detay" asp-route-id="7" class="btn-detay">Detayları İncele</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-4 urun-oget fade-in-up delay-3" data-kategori="kolye">
+                <div class="urun-kart-wrapper">
+                    <div class="urun-kart-gorsel" style="background:linear-gradient(135deg,#f0f5ff,#c8d8f0);">
+                        <span class="urun-rozet">Kolye</span>
+                        <span class="urun-rozet-yeni">Yeni</span>
+                        <img src="/img/urunler/9.jpg" style="width: 100%; height: 100%; object-fit: cover;" alt="Safir Taşlı Kolye" />
+                        <div class="overlay">
+                            <a asp-controller="Home" asp-action="Detay" asp-route-id="9" class="hizli-incele">Hızlı İncele</a>
+                        </div>
+                    </div>
+                    <div class="urun-kart-bilgi">
+                        <p class="kategori">Kolye</p>
+                        <h3 class="isim">Safir Taşlı Kolye</h3>
+                        <p class="aciklama">18 Ayar · 4.1 gr · Safir uç taş</p>
+                        <div class="alt-satir">
+                            <span class="fiyat">34.720 TL</span>
+                            <a asp-controller="Home" asp-action="Detay" asp-route-id="9" class="btn-detay">Detayları İncele</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-4 urun-oget fade-in-up delay-1" data-kategori="kupe">
+                <div class="urun-kart-wrapper">
+                    <div class="urun-kart-gorsel" style="background:linear-gradient(135deg,#fff8ee,#e8d08a60);">
+                        <span class="urun-rozet">Küpe</span>
+                        <img src="/img/urunler/4.jpg" style="width: 100%; height: 100%; object-fit: cover;" alt="Damla Küpe" />
+                        <div class="overlay">
+                            <a asp-controller="Home" asp-action="Detay" asp-route-id="4" class="hizli-incele">Hızlı İncele</a>
+                        </div>
+                    </div>
+                    <div class="urun-kart-bilgi">
+                        <p class="kategori">Küpe</p>
+                        <h3 class="isim">Damla Küpe</h3>
+                        <p class="aciklama">14 Ayar · 2.8 gr · Düşen damla form</p>
+                        <div class="alt-satir">
+                            <span class="fiyat">9.826 TL</span>
+                            <a asp-controller="Home" asp-action="Detay" asp-route-id="4" class="btn-detay">Detayları İncele</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-4 urun-oget fade-in-up delay-2" data-kategori="kupe">
+                <div class="urun-kart-wrapper">
+                    <div class="urun-kart-gorsel" style="background:linear-gradient(135deg,#f8f8f0,#d8d0a8);">
+                        <span class="urun-rozet">Küpe</span>
+                        <img src="/img/urunler/10.jpg" style="width: 100%; height: 100%; object-fit: cover;" alt="Sıkma Küpe" />
+                        <div class="overlay">
+                            <a asp-controller="Home" asp-action="Detay" asp-route-id="10" class="hizli-incele">Hızlı İncele</a>
+                        </div>
+                    </div>
+                    <div class="urun-kart-bilgi">
+                        <p class="kategori">Küpe</p>
+                        <h3 class="isim">Sıkma Küpe</h3>
+                        <p class="aciklama">22 Ayar · 3.6 gr · Geleneksel sıkma</p>
+                        <div class="alt-satir">
+                            <span class="fiyat">12.643 TL</span>
+                            <a asp-controller="Home" asp-action="Detay" asp-route-id="10" class="btn-detay">Detayları İncele</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-4 urun-oget fade-in-up delay-3" data-kategori="set">
+                <div class="urun-kart-wrapper">
+                    <div class="urun-kart-gorsel" style="background:linear-gradient(135deg,#fff8e8,#c9a84c20);">
+                        <span class="urun-rozet">Set</span>
+                        <span class="urun-rozet-yeni">Özel Fiyat</span>
+                       <img src="/img/urunler/5.jpg" style="width: 100%; height: 100%; object-fit: cover;" alt="Gelin Seti" />
+                        <div class="overlay">
+                            <a asp-controller="Home" asp-action="Detay" asp-route-id="5" class="hizli-incele">Hızlı İncele</a>
+                        </div>
+                    </div>
+                    <div class="urun-kart-bilgi">
+                        <p class="kategori">Komple Set</p>
+                        <h3 class="isim">Gelin Seti</h3>
+                        <p class="aciklama">22 Ayar · Kolye + Bilezik + Küpe</p>
+                        <div class="alt-satir">
+                            <span class="fiyat">58.200 TL</span>
+                            <a asp-controller="Home" asp-action="Detay" asp-route-id="5" class="btn-detay">Detayları İncele</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-4 urun-oget fade-in-up delay-1" data-kategori="set">
+                <div class="urun-kart-wrapper">
+                    <div class="urun-kart-gorsel" style="background:linear-gradient(135deg,#f5f0e8,#d8c898);">
+                        <span class="urun-rozet">Set</span>
+                        <img src="/img/urunler/2.jpg" style="width: 100%; height: 100%; object-fit: cover;" alt="Anneler Günü Seti" />
+                        <div class="overlay">
+                            <a asp-controller="Home" asp-action="Detay" asp-route-id="2" class="hizli-incele">Hızlı İncele</a>
+                        </div>
+                    </div>
+                    <div class="urun-kart-bilgi">
+                        <p class="kategori">İkili Set</p>
+                        <h3 class="isim">Anneler Günü Seti</h3>
+                        <p class="aciklama">14 Ayar · Kolye + Küpe ikilisi</p>
+                        <div class="alt-satir">
+                            <span class="fiyat">21.500 TL</span>
+                            <a asp-controller="Home" asp-action="Detay" asp-route-id="2" class="btn-detay">Detayları İncele</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</main>

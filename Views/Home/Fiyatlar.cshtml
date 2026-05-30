@@ -1,0 +1,126 @@
+@{
+    ViewData["Title"] = "Canlı Piyasa Fiyatları";
+}
+
+@section Scripts {
+    <style>
+        /* CSS kuralları - @@ kaçışları ile düzenlendi */
+        .tablo-kart { border: 1px solid #e8e0d0; background: var(--beyaz); overflow: hidden; margin-bottom: 40px; }
+        .tablo-kart .tablo-baslik-satiri { background: var(--siyah); padding: 18px 24px; display: flex; align-items: center; gap: 12px; border-bottom: 2px solid var(--altin); }
+        .tablo-kart .tablo-baslik-satiri h4 { font-family: var(--font-baslik); color: var(--altin); font-size: 1.3rem; letter-spacing: 3px; text-transform: uppercase; margin: 0; font-weight: 400; }
+        .guncelleme-etiketi { background: #111; border: 1px solid #2a2a2a; color: var(--gri); font-size: 0.72rem; letter-spacing: 2px; padding: 8px 16px; display: inline-flex; align-items: center; gap: 8px; }
+        .guncelleme-etiketi .nokta { width: 7px; height: 7px; background: #2E7D32; border-radius: 50%; display: inline-block; animation: yanip-sonme 1.5s infinite; }
+        @@keyframes yanip-sonme { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+        .piyasa-bilgi-kart { background: var(--siyah); border: 1px solid #2a2a2a; padding: 24px; text-align: center; transition: var(--gecis); }
+        .piyasa-bilgi-kart:hover { border-color: var(--altin); }
+        .piyasa-bilgi-kart .pb-ikon { font-size: 2rem; margin-bottom: 8px; }
+        .piyasa-bilgi-kart .pb-deger { font-family: var(--font-baslik); font-size: 1.8rem; color: var(--altin); font-weight: 600; line-height: 1; }
+        .piyasa-bilgi-kart .pb-adi { font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; color: #555; margin-top: 6px; }
+        .piyasa-bilgi-kart .pb-degisim { font-size: 0.78rem; margin-top: 6px; font-weight: 500; }
+        .tablo-responsive-wrapper { overflow-x: auto; }
+    </style>
+}
+
+<div class="page-header-band">
+    <p class="bolum-alt-yazi" style="color:#444;">Gerçek Zamanlı Veriler</p>
+    <h1>Canlı Piyasa Fiyatları</h1>
+    <div class="altin-cizgi"></div>
+    <p>Altın, gümüş ve döviz alış–satış fiyatları</p>
+    <div class="d-flex justify-content-center mt-3">
+        <div class="guncelleme-etiketi">
+            <span class="nokta"></span>
+            <span>Son Güncelleme: <span id="saatGoster">--:--</span></span>
+            <span>·</span>
+            <span>Bilgi Amaçlıdır</span>
+        </div>
+    </div>
+</div>
+
+<main style="background:var(--krem);padding:60px 0;">
+    <div class="container">
+        <div class="row g-3 mb-5">
+            <div class="col-6 col-md-3"><div class="piyasa-bilgi-kart"><div class="pb-ikon">🥇</div><div class="pb-deger">3.842</div><div class="pb-adi">Gram Altın (TL)</div><div class="pb-degisim" style="color:#2E7D32;">▲ +%0.34</div></div></div>
+            <div class="col-6 col-md-3"><div class="piyasa-bilgi-kart"><div class="pb-ikon">💵</div><div class="pb-deger">38.42</div><div class="pb-adi">USD / TL</div><div class="pb-degisim" style="color:#C62828;">▼ -0.12</div></div></div>
+            <div class="col-6 col-md-3"><div class="piyasa-bilgi-kart"><div class="pb-ikon">💶</div><div class="pb-deger">41.75</div><div class="pb-adi">EUR / TL</div><div class="pb-degisim" style="color:#2E7D32;">▲ +0.08</div></div></div>
+            <div class="col-6 col-md-3"><div class="piyasa-bilgi-kart"><div class="pb-ikon">🥈</div><div class="pb-deger">44.80</div><div class="pb-adi">Gram Gümüş (TL)</div><div class="pb-degisim" style="color:#2E7D32;">▲ +%0.21</div></div></div>
+        </div>
+
+        <div class="tablo-kart">
+            <div class="tablo-baslik-satiri"><i class="bi bi-gem"></i><h4>Altın Fiyatları</h4></div>
+            <div class="tablo-responsive-wrapper">
+                <table class="altin-tablo">
+                    <thead><tr><th>Altın Türü</th><th>Alış (TL)</th><th>Satış (TL)</th><th>Gram</th><th>Ayar</th><th>Değişim</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>Gram Altın</strong></td><td>3.815</td><td><strong>3.842</strong></td><td>1 gr</td><td>24 Ayar</td><td class="deger-yukari">▲ +%0.34</td></tr>
+                        <tr><td><strong>Çeyrek Altın</strong></td><td>6.287</td><td><strong>6.320</strong></td><td>1.608 gr</td><td>22 Ayar</td><td class="deger-yukari">▲ +%0.28</td></tr>
+                        <tr><td><strong>Yarım Altın</strong></td><td>12.520</td><td><strong>12.580</strong></td><td>3.217 gr</td><td>22 Ayar</td><td class="deger-yukari">▲ +%0.30</td></tr>
+                        <tr><td><strong>Tam Altın</strong></td><td>24.980</td><td><strong>25.100</strong></td><td>6.435 gr</td><td>22 Ayar</td><td class="deger-yukari">▲ +%0.31</td></tr>
+                        <tr><td><strong>Ata Altın</strong></td><td>25.100</td><td><strong>25.250</strong></td><td>6.435 gr</td><td>22 Ayar</td><td class="deger-asagi">▼ -0.05</td></tr>
+                        <tr><td><strong>Beşli Altın</strong></td><td>124.500</td><td><strong>125.200</strong></td><td>32.175 gr</td><td>22 Ayar</td><td class="deger-yukari">▲ +%0.29</td></tr>
+                        <tr><td><strong>Reşat Altın</strong></td><td>26.200</td><td><strong>26.400</strong></td><td>6.435 gr</td><td>22 Ayar</td><td class="deger-yukari">▲ +%0.35</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="tablo-kart">
+            <div class="tablo-baslik-satiri"><i class="bi bi-bar-chart-steps"></i><h4>Ayara Göre Ham Altın</h4></div>
+            <div class="tablo-responsive-wrapper">
+                <table class="altin-tablo">
+                    <thead><tr><th>Ayar</th><th>Alış</th><th>Satış</th><th>Saflık</th><th>Kullanım</th><th>Değişim</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>24 Ayar</strong></td><td>3.815</td><td><strong>3.842</strong></td><td>%99.9</td><td>Yatırım</td><td class="deger-yukari">▲ +%0.34</td></tr>
+                        <tr><td><strong>22 Ayar</strong></td><td>3.490</td><td><strong>3.512</strong></td><td>%91.6</td><td>Bilezik</td><td class="deger-yukari">▲ +%0.31</td></tr>
+                        <tr><td><strong>18 Ayar</strong></td><td>2.858</td><td><strong>2.876</strong></td><td>%75.0</td><td>Pırlanta</td><td class="deger-yukari">▲ +%0.28</td></tr>
+                        <tr><td><strong>14 Ayar</strong></td><td>2.224</td><td><strong>2.238</strong></td><td>%58.5</td><td>Alyans</td><td class="deger-asagi">▼ -0.02</td></tr>
+                        <tr><td><strong>8 Ayar</strong></td><td>1.272</td><td><strong>1.280</strong></td><td>%33.3</td><td>Dekoratif</td><td class="deger-yukari">▲ +%0.15</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="tablo-kart">
+            <div class="tablo-baslik-satiri"><i class="bi bi-currency-exchange"></i><h4>Döviz Kurları</h4></div>
+            <div class="tablo-responsive-wrapper">
+                <table class="altin-tablo">
+                    <thead><tr><th>Döviz</th><th>Alış</th><th>Satış</th><th>Önceki</th><th>Yüksek</th><th>Düşük</th><th>Değişim</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>USD — ABD Doları</strong></td><td>38.36</td><td><strong>38.42</strong></td><td>38.54</td><td>38.68</td><td>38.30</td><td class="deger-asagi">▼ -0.12</td></tr>
+                        <tr><td><strong>EUR — Euro</strong></td><td>41.68</td><td><strong>41.75</strong></td><td>41.67</td><td>41.90</td><td>41.58</td><td class="deger-yukari">▲ +0.08</td></tr>
+                        <tr><td><strong>GBP — İngiliz Sterlini</strong></td><td>48.90</td><td><strong>49.05</strong></td><td>48.82</td><td>49.20</td><td>48.75</td><td class="deger-yukari">▲ +0.23</td></tr>
+                        <tr><td><strong>CHF — İsviçre Frangı</strong></td><td>43.20</td><td><strong>43.38</strong></td><td>43.15</td><td>43.55</td><td>43.05</td><td class="deger-yukari">▲ +0.23</td></tr>
+                        <tr><td><strong>SAR — Suudi Riyali</strong></td><td>10.22</td><td><strong>10.28</strong></td><td>10.25</td><td>10.32</td><td>10.18</td><td class="deger-asagi">▼ -0.03</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="tablo-kart">
+            <div class="tablo-baslik-satiri"><i class="bi bi-circle-half"></i><h4>Gümüş Fiyatları</h4></div>
+            <div class="tablo-responsive-wrapper">
+                <table class="altin-tablo">
+                    <thead><tr><th>Tür</th><th>Alış</th><th>Satış</th><th>Birim</th><th>Değişim</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>Gram Gümüş</strong></td><td>44.60</td><td><strong>44.80</strong></td><td>1 gram</td><td class="deger-yukari">▲ +%0.21</td></tr>
+                        <tr><td><strong>Ons Gümüş</strong></td><td>1.385</td><td><strong>1.392</strong></td><td>31.1 gram</td><td class="deger-yukari">▲ +%0.18</td></tr>
+                        <tr><td><strong>Gümüş 925</strong></td><td>41.25</td><td><strong>41.45</strong></td><td>1 gram</td><td class="deger-yukari">▲ +%0.19</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="fade-in-up" style="background:#fff;border-left:3px solid var(--altin);padding:18px 24px;font-size:0.83rem;color:#888;line-height:1.8;">
+            <i class="bi bi-info-circle" style="color:var(--altin);margin-right:8px;"></i>
+            <strong style="color:var(--siyah);">Önemli Not:</strong> Yukarıdaki fiyatlar bilgi amaçlıdır.
+        </div>
+    </div>
+</main>
+
+<script>
+    function saatGuncelle() {
+        var s = new Date();
+        document.getElementById('saatGoster').textContent = s.getHours().toString().padStart(2, '0') + ':' + s.getMinutes().toString().padStart(2, '0') + ':' + s.getSeconds().toString().padStart(2, '0');
+    }
+    setInterval(saatGuncelle, 1000);
+    saatGuncelle();
+</script>

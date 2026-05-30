@@ -1,0 +1,728 @@
+@model KuyumcuMVC.Models.Urun
+@{
+    ViewData["Title"] = Model.UrunAdi + " Detayı";
+
+    // Kategoriye göre emoji belirleme
+    string emoji = "✨";
+    if (Model.KategoriID == 1) emoji = "🔗"; // Bilezik
+    else if (Model.KategoriID == 2) emoji = "💍"; // Yüzük
+    else if (Model.KategoriID == 3) emoji = "💑"; // Alyans
+    else if (Model.KategoriID == 4) emoji = "👑"; // Set
+    else if (Model.KategoriID == 5) emoji = "⭐"; // Küpe
+    else if (Model.KategoriID == 6) emoji = "💎"; // Kolye
+
+    // Veritabanındaki ayarlara göre tahmini gramaj fiyatı
+    double altinFiyati = 3500; 
+    if (Model.Ayar == 22) altinFiyati = 3840;
+    else if (Model.Ayar == 18) altinFiyati = 2876;
+    else if (Model.Ayar == 14) altinFiyati = 2231;
+
+    double toplamFiyat = (Model.Gramaj ?? 0) * altinFiyati + Model.IscilikUcreti;
+    string saflik = Model.Ayar == 22 ? "%91.6 — 916 Milyem" : (Model.Ayar == 18 ? "%75.0 — 750 Milyem" : "%58.5 — 585 Milyem");
+}
+
+<style>
+    /* ---- Bu sayfaya özel stiller ---- */
+
+    /* Breadcrumb (İz Kırıntısı) navigasyonu */
+    .iz-kirintisi {
+        background: #f0ebe0;
+        padding: 12px 0;
+        border-bottom: 1px solid #e8e0d0;
+    }
+
+    .iz-kirintisi .breadcrumb {
+        margin: 0;
+        font-size: 0.72rem;
+        letter-spacing: 1px;
+    }
+
+    .iz-kirintisi .breadcrumb-item a {
+        color: var(--gri);
+        text-decoration: none;
+    }
+
+    .iz-kirintisi .breadcrumb-item a:hover {
+        color: var(--altin-koyu);
+    }
+
+    .iz-kirintisi .breadcrumb-item.active {
+        color: var(--altin-koyu);
+    }
+
+    .iz-kirintisi .breadcrumb-item + .breadcrumb-item::before {
+        color: var(--altin);
+    }
+
+    /* ---- ÜRÜN DETAY ANA ALANI ---- */
+    .detay-alani {
+        padding: 60px 0 80px;
+        background: var(--krem);
+    }
+
+    /* Sol: Büyük ürün görseli */
+    .urun-buyuk-gorsel {
+        background: linear-gradient(135deg, #f5edd8 0%, #e8d08a 50%, #f5edd8 100%);
+        border: 1px solid #e8e0d0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 480px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .urun-buyuk-gorsel .ana-emoji {
+        font-size: 10rem;
+        animation: hafif-yukari-asagi 4s ease-in-out infinite;
+        user-select: none;
+    }
+
+    @@keyframes hafif-yukari-asagi {
+        0%, 100% { transform: translateY(0) rotate(-2deg); }
+        50%       { transform: translateY(-12px) rotate(2deg); }
+    }
+
+    .gorsel-ayar-rozet {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        background: var(--siyah);
+        color: var(--altin);
+        font-size: 0.65rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        padding: 6px 14px;
+        font-family: var(--font-metin);
+    }
+
+    .thumbnail-satiri {
+        display: flex;
+        gap: 10px;
+        margin-top: 14px;
+    }
+
+    .thumbnail {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #f0e8d0, #d8c880);
+        border: 1px solid #e0d8c0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        cursor: pointer;
+        transition: var(--gecis);
+    }
+
+    .thumbnail:hover, .thumbnail.aktif {
+        border-color: var(--altin);
+        background: linear-gradient(135deg, #e8d080, #c9a840);
+    }
+
+    /* ---- SAĞ: ÜRÜN BİLGİLERİ ---- */
+    .urun-bilgi-alani {
+        padding-left: 40px;
+    }
+
+    .urun-kategori-etiket {
+        font-size: 0.65rem;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        color: var(--altin);
+        margin-bottom: 10px;
+    }
+
+    .urun-ana-baslik {
+        font-family: var(--font-baslik);
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 300;
+        color: var(--siyah);
+        line-height: 1.2;
+        margin-bottom: 8px;
+    }
+
+    .urun-alt-cizgi {
+        width: 50px;
+        height: 2px;
+        background: var(--altin);
+        margin: 16px 0;
+    }
+
+    .urun-kisa-aciklama {
+        color: #666;
+        font-size: 0.9rem;
+        line-height: 1.8;
+        margin-bottom: 24px;
+    }
+
+    .fiyat-alani {
+        background: var(--siyah);
+        padding: 20px 24px;
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .fiyat-alani .ana-fiyat {
+        font-family: var(--font-baslik);
+        font-size: 2.2rem;
+        color: var(--altin);
+        font-weight: 600;
+        line-height: 1;
+    }
+
+    .fiyat-alani .fiyat-aciklama {
+        font-size: 0.68rem;
+        color: #666;
+        letter-spacing: 1px;
+    }
+
+    .fiyat-alani .gram-fiyati {
+        font-size: 0.82rem;
+        color: #888;
+    }
+
+    .ozellik-tablosu {
+        width: 100%;
+        margin-bottom: 24px;
+    }
+
+    .ozellik-tablosu tr {
+        border-bottom: 1px solid #e8e0d0;
+    }
+
+    .ozellik-tablosu td {
+        padding: 10px 0;
+        font-size: 0.85rem;
+    }
+
+    .ozellik-tablosu td:first-child {
+        font-size: 0.65rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--gri);
+        width: 40%;
+    }
+
+    .ozellik-tablosu td:last-child {
+        color: var(--siyah);
+        font-weight: 500;
+    }
+
+    .aksiyon-butonlari {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 24px;
+    }
+
+    .btn-satin-al {
+        background: var(--altin);
+        color: var(--siyah);
+        border: 2px solid var(--altin);
+        font-family: var(--font-metin);
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        padding: 14px 36px;
+        cursor: pointer;
+        transition: var(--gecis);
+        flex: 1;
+        text-align: center;
+    }
+
+    .btn-satin-al:hover {
+        background: transparent;
+        color: var(--altin);
+    }
+
+    .btn-iletisim-al {
+        background: transparent;
+        color: var(--siyah);
+        border: 2px solid var(--siyah);
+        font-family: var(--font-metin);
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        padding: 14px 24px;
+        cursor: pointer;
+        transition: var(--gecis);
+        text-decoration: none;
+        text-align: center;
+    }
+
+    .btn-iletisim-al:hover {
+        background: var(--siyah);
+        color: var(--altin);
+    }
+
+    .guven-rozetleri {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        border-top: 1px solid #e8e0d0;
+        padding-top: 20px;
+    }
+
+    .guven-rozet {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.72rem;
+        color: var(--gri);
+    }
+
+    .guven-rozet i {
+        color: var(--altin);
+        font-size: 1rem;
+    }
+
+    /* ---- AÇIKLAMALAR BÖLÜMÜ (alt kısım) ---- */
+    .aciklamalar-bolum {
+        background: var(--beyaz);
+        padding: 60px 0;
+        border-top: 1px solid #e8e0d0;
+    }
+
+    .detay-tab-nav {
+        display: flex;
+        border-bottom: 2px solid #e8e0d0;
+        margin-bottom: 30px;
+        gap: 0;
+        overflow-x: auto;
+    }
+
+    .detay-tab-nav .tab-btn {
+        font-family: var(--font-metin);
+        font-size: 0.72rem;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        padding: 12px 24px;
+        border: none;
+        background: transparent;
+        color: var(--gri);
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        margin-bottom: -2px;
+        transition: var(--gecis);
+        white-space: nowrap;
+    }
+
+    .detay-tab-nav .tab-btn:hover,
+    .detay-tab-nav .tab-btn.aktif {
+        color: var(--siyah);
+        border-bottom-color: var(--altin);
+    }
+
+    .tab-icerik {
+        display: none;
+    }
+
+    .tab-icerik.aktif {
+        display: block;
+        animation: fadeInUp 0.4s ease;
+    }
+
+    /* ---- BENZERİ ÜRÜNLER ---- */
+    .benzer-urunler-bolum {
+        padding: 60px 0;
+        background: var(--krem);
+    }
+
+    @@media (max-width: 992px) {
+        .urun-bilgi-alani {
+            padding-left: 0;
+            margin-top: 30px;
+        }
+    }
+</style>
+
+<div class="iz-kirintisi">
+    <div class="container">
+        <nav aria-label="İz kırıntısı">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Ana Sayfa</a></li>
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Urunler">Koleksiyon</a></li>
+                <li class="breadcrumb-item active" aria-current="page">@Model.UrunAdi</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<section class="detay-alani">
+    <div class="container">
+        <div class="row align-items-start">
+
+           <div class="col-lg-5 fade-in-up">
+    <div class="urun-buyuk-gorsel" style="padding: 0; background: var(--krem);">
+        <img id="anaResim" src="/img/urunler/@(Model.UrunID).jpg" alt="@Model.UrunAdi" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='/img/varsayilan.jpg'" />
+        <span class="gorsel-ayar-rozet" style="z-index: 2;">@Model.Ayar Ayar Altın</span>
+    </div>
+
+    <div class="thumbnail-satiri">
+        <div class="thumbnail aktif" onclick="resimDegistir(this, '/img/urunler/@(Model.UrunID).jpg')" style="padding:0; overflow:hidden;">
+            <img src="/img/urunler/@(Model.UrunID).jpg" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.parentElement.style.display='none'" />
+        </div>
+        <div class="thumbnail" onclick="resimDegistir(this, '/img/urunler/@(Model.UrunID)-1.jpg')" style="padding:0; overflow:hidden;">
+            <img src="/img/urunler/@(Model.UrunID)-1.jpg" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.parentElement.style.display='none'" />
+        </div>
+        <div class="thumbnail" onclick="resimDegistir(this, '/img/urunler/@(Model.UrunID)-2.jpg')" style="padding:0; overflow:hidden;">
+            <img src="/img/urunler/@(Model.UrunID)-2.jpg" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.parentElement.style.display='none'" />
+        </div>
+    </div>
+</div>
+
+            <div class="col-lg-7 fade-in-up delay-2">
+                <div class="urun-bilgi-alani">
+
+                    <p class="urun-kategori-etiket">
+                        <a asp-controller="Home" asp-action="Urunler" style="color:var(--altin);text-decoration:none;">@(Model.Kategori != null ? Model.Kategori.KategoriAdi : "Koleksiyon")</a>
+                        &nbsp;›&nbsp; El İşi Tasarım
+                    </p>
+
+                    <h1 class="urun-ana-baslik">@Model.UrunAdi</h1>
+                    <div class="urun-alt-cizgi"></div>
+
+                    <p class="urun-kisa-aciklama">@Model.KisaAciklama</p>
+
+                    <div class="fiyat-alani">
+                        <div>
+                            <p class="fiyat-aciklama">Satış Fiyatı (KDV Dahil)</p>
+                            <p class="ana-fiyat">@toplamFiyat.ToString("N0") TL</p>
+                            <p class="gram-fiyati">@Model.Gramaj gr × @altinFiyati.ToString("N0") TL/gr</p>
+                        </div>
+                        <div style="text-align:right;">
+                            <p class="fiyat-aciklama">İşçilik</p>
+                            <p style="color:var(--altin);font-size:1rem;font-family:var(--font-baslik);">
+                                @(Model.IscilikUcreti > 0 ? Model.IscilikUcreti.ToString("N0") + " TL" : "Dahil")
+                            </p>
+                            <p class="gram-fiyati">KDV Dahil</p>
+                        </div>
+                    </div>
+
+                    <table class="ozellik-tablosu">
+                        <tr>
+                            <td>Ürün Kodu</td>
+                            <td>KOD-@Model.UrunID.ToString("D4")</td>
+                        </tr>
+                        <tr>
+                            <td>Metal Türü</td>
+                            <td>Altın (Au)</td>
+                        </tr>
+                        <tr>
+                            <td>Ayar</td>
+                            <td>
+                                <span style="background:var(--altin);color:var(--siyah);font-size:0.7rem;padding:3px 10px;font-weight:700;">@Model.Ayar AYAR</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Gramaj</td>
+                            <td>@Model.Gramaj gram</td>
+                        </tr>
+                        <tr>
+                            <td>Saflık Oranı</td>
+                            <td>@saflik</td>
+                        </tr>
+                        <tr>
+                            <td>Garanti</td>
+                            <td>Ömür Boyu Tamir Güvencesi</td>
+                        </tr>
+                        <tr>
+                            <td>Stok Durumu</td>
+                            <td>
+                                @if (Model.StokDurumu == 1)
+                                {
+                                    <span style="color:#2E7D32;font-weight:600;">
+                                        <i class="bi bi-check-circle-fill me-1"></i>Mevcut
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span style="color:#d32f2f;font-weight:600;">
+                                        <i class="bi bi-x-circle-fill me-1"></i>Tükendi
+                                    </span>
+                                }
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div class="aksiyon-butonlari">
+                        <button class="btn-satin-al" onclick="alert('Satın alma için mağazamızı arayınız: 0324 321 45 67')">
+                            <i class="bi bi-telephone me-2"></i>
+                            Sipariş Ver
+                        </button>
+                        <a asp-controller="Home" asp-action="Iletisim" class="btn-iletisim-al">
+                            <i class="bi bi-chat-dots me-2"></i>
+                            Bilgi Al
+                        </a>
+                    </div>
+
+                    <div class="guven-rozetleri">
+                        <div class="guven-rozet">
+                            <i class="bi bi-shield-check"></i>
+                            <span>Garantili Ürün</span>
+                        </div>
+                        <div class="guven-rozet">
+                            <i class="bi bi-award"></i>
+                            <span>Ayar Damgalı</span>
+                        </div>
+                        <div class="guven-rozet">
+                            <i class="bi bi-tools"></i>
+                            <span>Ücretsiz Tamir</span>
+                        </div>
+                        <div class="guven-rozet">
+                            <i class="bi bi-box-seam"></i>
+                            <span>Hediye Paketi</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section class="aciklamalar-bolum">
+    <div class="container">
+
+        <div class="detay-tab-nav" id="tabNav">
+            <button class="tab-btn aktif" data-tab="aciklama">Ürün Açıklaması</button>
+            <button class="tab-btn" data-tab="ozellikler">Teknik Özellikler</button>
+            <button class="tab-btn" data-tab="bakim">Bakım Talimatları</button>
+            <button class="tab-btn" data-tab="teslimat">Teslimat Bilgisi</button>
+        </div>
+
+        <div class="tab-icerik aktif" id="tab-aciklama">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h4 style="font-family:var(--font-baslik);font-size:1.5rem;margin-bottom:16px;font-weight:400;">@Model.UrunAdi Hakkında</h4>
+                    <div style="font-size:0.9rem;color:#555;line-height:1.9;margin-bottom:14px;">
+                        @Html.Raw(Model.DetayliAciklama)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-icerik" id="tab-ozellikler">
+            <table class="altin-tablo">
+                <thead>
+                    <tr>
+                        <th>Özellik</th>
+                        <th>Değer</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Ürün Adı</td><td><strong>@Model.UrunAdi</strong></td></tr>
+                    <tr><td>Ürün Kodu</td><td>KOD-@Model.UrunID.ToString("D4")</td></tr>
+                    <tr><td>Metal Türü</td><td>Altın (Au)</td></tr>
+                    <tr><td>Ayar</td><td>@Model.Ayar Ayar</td></tr>
+                    <tr><td>Saflık Oranı</td><td>@saflik</td></tr>
+                    <tr><td>Gramaj</td><td>@Model.Gramaj gram</td></tr>
+                    <tr><td>Üretim Yeri</td><td>Mersin, Türkiye</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="tab-icerik" id="tab-bakim">
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <h4 style="font-family:var(--font-baslik);font-size:1.3rem;margin-bottom:16px;color:var(--altin-koyu);">
+                        <i class="bi bi-droplet me-2"></i>Altın Takının Bakımı
+                    </h4>
+                    <div style="font-size:0.88rem;color:#555;line-height:2;">
+                        <p><strong>Temizleme:</strong> Hafif sabunlu ılık su ve yumuşak bir bez yeterlidir. Sert deterjanlardan kaçının.</p>
+                        <p><strong>Parlatma:</strong> Özel altın parlatma bezi veya kuyumcunuzda profesyonel temizlik.</p>
+                        <p><strong>Saklama:</strong> Nem almayan, yumuşak astarlı bir kutuda diğer takılardan ayrı saklayın.</p>
+                        <p><strong>Kimyasal Temas:</strong> Parfüm, krem, havuz suyu ve temizlik ürünlerinden uzak tutun.</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h4 style="font-family:var(--font-baslik);font-size:1.3rem;margin-bottom:16px;color:var(--altin-koyu);">
+                        <i class="bi bi-exclamation-triangle me-2"></i>Dikkat Edilmesi Gerekenler
+                    </h4>
+                    <div style="font-size:0.88rem;color:#555;line-height:2;">
+                        <p>⚠️ Ağır fiziksel aktivitelerde çıkarmayı unutmayın.</p>
+                        <p>⚠️ Deniz veya havuzda takı takılı yüzmeyin.</p>
+                        <p>⚠️ Sert darbeye maruz bırakmayın — deformasyona yol açabilir.</p>
+                        <p>✅ Yılda en az bir kez kuyumcunuza kontrol ettirin.</p>
+                        <p>✅ Tamir için her zaman yetkili kuyumcuya başvurun.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-icerik" id="tab-teslimat">
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div style="text-align:center;padding:24px;border:1px solid #e8e0d0;">
+                        <i class="bi bi-shop" style="font-size:2.5rem;color:var(--altin);display:block;margin-bottom:12px;"></i>
+                        <h5 style="font-family:var(--font-baslik);margin-bottom:8px;">Mağazadan Teslim</h5>
+                        <p style="font-size:0.83rem;color:#777;">Sipariş tarihinde hazır. Mağazamızdan elden teslim alabilirsiniz.</p>
+                        <p style="color:var(--altin);font-weight:600;font-size:0.85rem;">Ücretsiz</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div style="text-align:center;padding:24px;border:1px solid #e8e0d0;">
+                        <i class="bi bi-truck" style="font-size:2.5rem;color:var(--altin);display:block;margin-bottom:12px;"></i>
+                        <h5 style="font-family:var(--font-baslik);margin-bottom:8px;">Kargo ile Gönderim</h5>
+                        <p style="font-size:0.83rem;color:#777;">Sigortalı, özel paketleme ile güvenli kargo. 2-3 iş günü.</p>
+                        <p style="color:var(--altin);font-weight:600;font-size:0.85rem;">150 TL</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div style="text-align:center;padding:24px;border:1px solid #e8e0d0;">
+                        <i class="bi bi-gift" style="font-size:2.5rem;color:var(--altin);display:block;margin-bottom:12px;"></i>
+                        <h5 style="font-family:var(--font-baslik);margin-bottom:8px;">Hediye Paketi</h5>
+                        <p style="font-size:0.83rem;color:#777;">Özel altın logolu hediye kutusu ve sertifika ile teslim.</p>
+                        <p style="color:var(--altin);font-weight:600;font-size:0.85rem;">Dahil</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<section class="benzer-urunler-bolum">
+    <div class="container">
+        <p class="bolum-alt-yazi">Keşfetmeye Devam Edin</p>
+        <h2 class="bolum-baslik">Popüler Ürünler</h2>
+        <div class="altin-divider"></div>
+
+        <div class="row g-4 mt-4">
+            <div class="col-sm-6 col-lg-3 fade-in-up delay-1">
+                <div class="urun-kart-wrapper">
+                    <div class="urun-kart-gorsel" style="background:linear-gradient(135deg,#fffbf0,#c9a84c30);height:200px;">
+                        <span class="urun-rozet">Bilezik</span>
+                        <div class="emoji-gorsel" style="font-size:4rem;">🔗</div>
+                        <div class="overlay">
+                            <a asp-controller="Home" asp-action="Detay" asp-route-id="6" class="hizli-incele">İncele</a>
+                        </div>
+                    </div>
+                    <div class="urun-kart-bilgi">
+                        <p class="kategori">Bilezik</p>
+                        <h3 class="isim" style="font-size:1.1rem;">Hasır Bilezik</h3>
+                        <div class="alt-satir">
+                            <span class="fiyat" style="font-size:1rem;">36.464 TL</span>
+                            <a asp-controller="Home" asp-action="Detay" asp-route-id="6" class="btn-detay">İncele</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-3 fade-in-up delay-2">
+                <div class="urun-kart-wrapper">
+                    <div class="urun-kart-gorsel" style="background:linear-gradient(135deg,#f8f5ec,#d4c580);height:200px;">
+                        <span class="urun-rozet">Bilezik</span>
+                        <div class="emoji-gorsel" style="font-size:4rem;">⭕</div>
+                        <div class="overlay">
+                            <a asp-controller="Home" asp-action="Detay" asp-route-id="8" class="hizli-incele">İncele</a>
+                        </div>
+                    </div>
+                    <div class="urun-kart-bilgi">
+                        <p class="kategori">Bilezik</p>
+                        <h3 class="isim" style="font-size:1.1rem;">Omega Bilezik</h3>
+                        <div class="alt-satir">
+                            <span class="fiyat" style="font-size:1rem;">23.986 TL</span>
+                            <a asp-controller="Home" asp-action="Detay" asp-route-id="8" class="btn-detay">İncele</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-3 fade-in-up delay-3">
+                <div class="urun-kart-wrapper">
+                    <div class="urun-kart-gorsel" style="background:linear-gradient(135deg,#fff8ee,#e8d08a60);height:200px;">
+                        <span class="urun-rozet">Küpe</span>
+                        <div class="emoji-gorsel" style="font-size:4rem;">🌟</div>
+                        <div class="overlay">
+                            <a asp-controller="Home" asp-action="Detay" asp-route-id="4" class="hizli-incele">İncele</a>
+                        </div>
+                    </div>
+                    <div class="urun-kart-bilgi">
+                        <p class="kategori">Küpe</p>
+                        <h3 class="isim" style="font-size:1.1rem;">Damla Küpe</h3>
+                        <div class="alt-satir">
+                            <span class="fiyat" style="font-size:1rem;">9.826 TL</span>
+                            <a asp-controller="Home" asp-action="Detay" asp-route-id="4" class="btn-detay">İncele</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-3 fade-in-up delay-4">
+                <div class="urun-kart-wrapper">
+                    <div class="urun-kart-gorsel" style="background:linear-gradient(135deg,#fffbf0,#e8d08a50);height:200px;">
+                        <span class="urun-rozet">Kolye</span>
+                        <div class="emoji-gorsel" style="font-size:4rem;">✨</div>
+                        <div class="overlay">
+                            <a asp-controller="Home" asp-action="Detay" asp-route-id="12" class="hizli-incele">İncele</a>
+                        </div>
+                    </div>
+                    <div class="urun-kart-bilgi">
+                        <p class="kategori">Kolye</p>
+                        <h3 class="isim" style="font-size:1.1rem;">Venezia Zincir</h3>
+                        <div class="alt-satir">
+                            <span class="fiyat" style="font-size:1rem;">18.965 TL</span>
+                            <a asp-controller="Home" asp-action="Detay" asp-route-id="12" class="btn-detay">İncele</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-5">
+            <a asp-controller="Home" asp-action="Urunler" class="btn-koyu">Tüm Ürünlere Dön</a>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        // ================================================
+        // SEKME SİSTEMİ
+        // ================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabButonlari = document.querySelectorAll('.tab-btn');
+            const tabIcerikleri = document.querySelectorAll('.tab-icerik');
+
+            tabButonlari.forEach(function(buton) {
+                buton.addEventListener('click', function() {
+                    var hedefTab = this.getAttribute('data-tab');
+
+                    tabButonlari.forEach(b => b.classList.remove('aktif'));
+                    tabIcerikleri.forEach(t => t.classList.remove('aktif'));
+
+                    this.classList.add('aktif');
+                    document.getElementById('tab-' + hedefTab).classList.add('aktif');
+                });
+            });
+
+            // ================================================
+            // THUMBNAIL SEÇİMİ
+            // ================================================
+            const thumbnaillar = document.querySelectorAll('.thumbnail');
+            thumbnaillar.forEach(function(thumb) {
+                thumb.addEventListener('click', function() {
+                    thumbnaillar.forEach(t => t.classList.remove('aktif'));
+                    this.classList.add('aktif');
+                });
+            });
+        });
+        // ================================================
+            // RESİM DEĞİŞTİRME FONKSİYONU
+            // ================================================
+            window.resimDegistir = function(element, resimYolu) {
+                document.getElementById('anaResim').src = resimYolu;
+                document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('aktif'));
+                element.classList.add('aktif');
+            };
+    </script>
+}

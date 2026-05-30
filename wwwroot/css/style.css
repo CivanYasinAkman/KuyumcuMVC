@@ -1,0 +1,754 @@
+/* ============================================================
+   ALTIN DÜNYA KUYUMCULUK - Ana Stil Dosyası
+   Tasarım Konsepti: Art Deco, Lüks, Altın-Siyah Palet
+   ============================================================ */
+
+/* ---------- Google Fonts Import ---------- */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Raleway:wght@300;400;500;600&display=swap');
+
+/* ---------- CSS Değişkenleri (Renk Paleti) ---------- */
+:root {
+  --altin:       #C9A84C;   /* Ana altın rengi         */
+  --altin-acik:  #E8D08A;   /* Açık altın / vurgu      */
+  --altin-koyu:  #8B6914;   /* Koyu altın / gölge      */
+  --siyah:       #0A0A0A;   /* Tam siyah               */
+  --siyah-yumus: #1A1A1A;   /* Yumuşak siyah           */
+  --krem:        #F8F4EC;   /* Krem / arka plan        */
+  --beyaz:       #FFFFFF;
+  --gri:         #888888;
+
+  --font-baslik: 'Cormorant Garamond', Georgia, serif;
+  --font-metin:  'Raleway', sans-serif;
+
+  --gecis: all 0.35s ease;
+}
+
+/* ---------- Sıfırlama ve Temel Stiller ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-metin);
+  background-color: var(--krem);
+  color: var(--siyah);
+  font-size: 16px;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* Seçili metni altın renginde göster */
+::selection {
+  background: var(--altin);
+  color: var(--beyaz);
+}
+
+/* ---------- NAVBAR ---------- */
+.navbar-kuyumcu {
+  background-color: var(--siyah) !important;
+  border-bottom: 2px solid var(--altin);
+  padding: 14px 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* Logo / Marka adı */
+.navbar-kuyumcu .navbar-brand {
+  font-family: var(--font-baslik);
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: var(--altin) !important;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: var(--gecis);
+}
+
+.navbar-kuyumcu .navbar-brand:hover {
+  color: var(--altin-acik) !important;
+  text-shadow: 0 0 12px rgba(201, 168, 76, 0.5);
+}
+
+/* Logo yanındaki küçük dekoratif çizgi */
+.navbar-kuyumcu .navbar-brand span {
+  display: block;
+  font-family: var(--font-metin);
+  font-size: 0.5rem;
+  letter-spacing: 5px;
+  color: var(--gri);
+  font-weight: 300;
+}
+
+/* Navigasyon linkleri */
+.navbar-kuyumcu .nav-link {
+  font-family: var(--font-metin);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #CCCCCC !important;
+  padding: 8px 16px !important;
+  transition: var(--gecis);
+  position: relative;
+}
+
+/* Alt çizgi hover efekti */
+.navbar-kuyumcu .nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 1px;
+  background: var(--altin);
+  transition: var(--gecis);
+  transform: translateX(-50%);
+}
+
+.navbar-kuyumcu .nav-link:hover,
+.navbar-kuyumcu .nav-link.active {
+  color: var(--altin) !important;
+}
+
+.navbar-kuyumcu .nav-link:hover::after,
+.navbar-kuyumcu .nav-link.active::after {
+  width: 60%;
+}
+
+/* Hamburger menü (mobil) */
+.navbar-toggler {
+  border-color: var(--altin) !important;
+}
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(201, 168, 76, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+}
+
+/* ---------- FOOTER ---------- */
+footer.site-footer {
+  background-color: var(--siyah);
+  color: #AAAAAA;
+  padding: 50px 0 20px;
+  border-top: 2px solid var(--altin);
+  font-family: var(--font-metin);
+  font-size: 0.85rem;
+}
+
+/* Footer başlıkları */
+footer.site-footer h5 {
+  font-family: var(--font-baslik);
+  color: var(--altin);
+  font-size: 1.15rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+
+footer.site-footer a {
+  color: #AAAAAA;
+  text-decoration: none;
+  transition: var(--gecis);
+}
+
+footer.site-footer a:hover {
+  color: var(--altin);
+}
+
+footer.site-footer ul {
+  list-style: none;
+  padding: 0;
+}
+
+footer.site-footer ul li {
+  margin-bottom: 8px;
+}
+
+/* Footer alt çizgi */
+.footer-alt {
+  border-top: 1px solid #2a2a2a;
+  margin-top: 30px;
+  padding-top: 20px;
+  text-align: center;
+  font-size: 0.75rem;
+  color: #555;
+  letter-spacing: 1px;
+}
+
+/* ---------- GENEL BUTON STİLLERİ ---------- */
+
+/* Birincil (altın) buton */
+.btn-altin {
+  background-color: transparent;
+  border: 1px solid var(--altin);
+  color: var(--altin);
+  font-family: var(--font-metin);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  padding: 12px 32px;
+  transition: var(--gecis);
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-altin:hover {
+  background-color: var(--altin);
+  color: var(--siyah);
+  box-shadow: 0 0 20px rgba(201, 168, 76, 0.35);
+  text-decoration: none;
+}
+
+/* İkincil (koyu) buton */
+.btn-koyu {
+  background-color: var(--siyah);
+  border: 1px solid var(--siyah);
+  color: var(--altin);
+  font-family: var(--font-metin);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  padding: 12px 32px;
+  transition: var(--gecis);
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-koyu:hover {
+  background-color: var(--altin);
+  border-color: var(--altin);
+  color: var(--siyah);
+  text-decoration: none;
+}
+
+/* ---------- SAYFA BAŞLIK BANDI ---------- */
+.page-header-band {
+  background-color: var(--siyah);
+  background-image: linear-gradient(135deg, rgba(201,168,76,0.08) 0%, transparent 50%);
+  padding: 60px 0 50px;
+  text-align: center;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.page-header-band h1 {
+  font-family: var(--font-baslik);
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  color: var(--altin);
+  font-weight: 300;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+}
+
+.page-header-band .altin-cizgi {
+  width: 80px;
+  height: 1px;
+  background: var(--altin);
+  margin: 16px auto 12px;
+}
+
+.page-header-band p {
+  color: var(--gri);
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+}
+
+/* ---------- YARDIMCI SINIFLARI ---------- */
+.altin-divider {
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--altin), transparent);
+  margin: 16px auto;
+}
+
+.bolum-baslik {
+  font-family: var(--font-baslik);
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 300;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--siyah);
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.bolum-alt-yazi {
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--gri);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+/* ---------- KART STİLLERİ ---------- */
+.urun-karti {
+  background: var(--beyaz);
+  border: 1px solid #e8e0d0;
+  overflow: hidden;
+  transition: var(--gecis);
+  margin-bottom: 30px;
+  position: relative;
+}
+
+.urun-karti:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.12), 0 0 0 1px var(--altin);
+}
+
+.urun-karti .kart-gorsel {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+  background-color: #f0ebe0;
+}
+
+.urun-karti:hover .kart-gorsel {
+  transform: scale(1.04);
+}
+
+.urun-karti .kart-icerik {
+  padding: 22px;
+}
+
+.urun-karti .kart-kategori {
+  font-size: 0.65rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--altin);
+  margin-bottom: 6px;
+}
+
+.urun-karti .kart-baslik {
+  font-family: var(--font-baslik);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--siyah);
+  margin-bottom: 8px;
+}
+
+.urun-karti .kart-fiyat {
+  font-family: var(--font-baslik);
+  font-size: 1.1rem;
+  color: var(--altin-koyu);
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+/* Vitrin kartı (ana sayfa) */
+.vitrin-karti {
+  background: var(--beyaz);
+  border: 1px solid #e8e0d0;
+  overflow: hidden;
+  transition: var(--gecis);
+  text-align: center;
+}
+
+.vitrin-karti:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.1);
+}
+
+.vitrin-karti img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.vitrin-karti .vitrin-icerik {
+  padding: 18px;
+}
+
+/* ---------- TABLO STİLLERİ ---------- */
+.altin-tablo {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-metin);
+  font-size: 0.88rem;
+}
+
+.altin-tablo thead th {
+  background-color: var(--siyah);
+  color: var(--altin);
+  font-size: 0.7rem;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  padding: 14px 18px;
+  border: none;
+  font-weight: 500;
+}
+
+.altin-tablo tbody tr {
+  border-bottom: 1px solid #e8e0d0;
+  transition: background 0.2s;
+}
+
+.altin-tablo tbody tr:hover {
+  background-color: rgba(201,168,76,0.06);
+}
+
+.altin-tablo tbody td {
+  padding: 14px 18px;
+  color: var(--siyah);
+}
+
+.altin-tablo .deger-yukari {
+  color: #2E7D32;
+  font-weight: 600;
+}
+
+.altin-tablo .deger-asagi {
+  color: #C62828;
+  font-weight: 600;
+}
+
+/* ---------- FORM STİLLERİ ---------- */
+.form-altin .form-control,
+.form-altin .form-select {
+  border: 1px solid #d4c9a8;
+  border-radius: 0;
+  background-color: var(--beyaz);
+  font-family: var(--font-metin);
+  font-size: 0.88rem;
+  padding: 12px 16px;
+  color: var(--siyah);
+  transition: var(--gecis);
+}
+
+.form-altin .form-control:focus,
+.form-altin .form-select:focus {
+  border-color: var(--altin);
+  box-shadow: 0 0 0 3px rgba(201,168,76,0.15);
+  outline: none;
+}
+
+.form-altin label {
+  font-size: 0.72rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gri);
+  margin-bottom: 6px;
+  display: block;
+}
+
+/* ---------- GENEL ANİMASYONLAR ---------- */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.7s ease forwards;
+}
+
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.25s; }
+.delay-3 { animation-delay: 0.4s; }
+.delay-4 { animation-delay: 0.55s; }
+
+/* ============================================================
+   ANA SAYFAYA ÖZEL TASARIMLAR (İndex.html'den aktarılanlar)
+   ============================================================ */
+/* ---- HERO SLIDER ---- */
+#heroSlider {
+  position: relative;
+  background: var(--siyah);
+  overflow: hidden;
+}
+
+#heroSlider .carousel-item {
+  height: clamp(420px, 80vh, 700px);
+  position: relative;
+}
+
+#heroSlider .slide-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: brightness(0.45);
+  transition: transform 8s ease;
+}
+
+#heroSlider .carousel-item.active .slide-bg {
+  transform: scale(1.06);
+}
+
+.slide-bg-1 { background: linear-gradient(135deg, #1a1200 0%, #3d2e00 50%, #1a1200 100%); }
+.slide-bg-2 { background: linear-gradient(135deg, #0d0d0d 0%, #1f1200 50%, #0d0d0d 100%); }
+.slide-bg-3 { background: linear-gradient(135deg, #0a0a0a 0%, #2a1800 50%, #0a0a0a 100%); }
+
+.slide-icerik {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.slide-icerik .kucuk-yazi {
+  font-family: var(--font-metin);
+  font-size: 0.7rem;
+  letter-spacing: 5px;
+  color: var(--altin);
+  text-transform: uppercase;
+  opacity: 0;
+  animation: slideInDown 0.8s 0.2s forwards;
+}
+
+.slide-icerik h2 {
+  font-family: var(--font-baslik);
+  font-size: clamp(2.4rem, 7vw, 5rem);
+  font-weight: 300;
+  color: var(--beyaz);
+  line-height: 1.15;
+  margin: 12px 0;
+  opacity: 0;
+  animation: slideInUp 0.8s 0.4s forwards;
+}
+
+.slide-icerik h2 em {
+  font-style: italic;
+  color: var(--altin-acik);
+}
+
+.slide-icerik p {
+  color: #ccc;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  max-width: 500px;
+  opacity: 0;
+  animation: slideInUp 0.8s 0.6s forwards;
+}
+
+.slide-icerik .btn-grup {
+  margin-top: 32px;
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+  opacity: 0;
+  animation: slideInUp 0.8s 0.8s forwards;
+}
+
+@keyframes slideInDown {
+  from { opacity: 0; transform: translateY(-16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  filter: invert(70%) sepia(100%) saturate(400%) hue-rotate(5deg);
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+  z-index: 10;
+}
+
+#heroSlider .carousel-indicators [data-bs-target] {
+  width: 30px;
+  height: 2px;
+  background: var(--altin);
+  opacity: 0.4;
+  border-radius: 0;
+}
+#heroSlider .carousel-indicators .active {
+  opacity: 1;
+}
+
+.hero-alt-cizgi {
+  background: var(--siyah);
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  padding: 18px;
+  border-bottom: 1px solid #1f1f1f;
+}
+
+.hero-alt-cizgi span {
+  font-family: var(--font-metin);
+  font-size: 0.65rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #555;
+}
+
+.hero-alt-cizgi .vurgu {
+  color: var(--altin);
+}
+
+/* ---- VİTRİN BÖLÜMÜ ---- */
+.vitrin-bolum {
+  padding: 80px 0;
+  background: var(--krem);
+}
+
+/* ---- FİYAT ÖZET BÖLÜMÜ ---- */
+.fiyat-ozet-bolum {
+  background: var(--siyah);
+  padding: 70px 0;
+}
+
+.fiyat-ozet-bolum .bolum-baslik {
+  color: var(--altin);
+}
+
+.fiyat-ozet-bolum .bolum-alt-yazi {
+  color: #666;
+}
+
+.fiyat-mini-kart {
+  border: 1px solid #2a2a2a;
+  background: #111;
+  padding: 20px;
+  text-align: center;
+  transition: var(--gecis);
+}
+
+.fiyat-mini-kart:hover {
+  border-color: var(--altin);
+  background: #161400;
+}
+
+.fiyat-mini-kart .fiyat-adi {
+  font-size: 0.65rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gri);
+  margin-bottom: 6px;
+}
+
+.fiyat-mini-kart .fiyat-deger {
+  font-family: var(--font-baslik);
+  font-size: 1.6rem;
+  color: var(--altin);
+  font-weight: 600;
+}
+
+.fiyat-mini-kart .fiyat-birim {
+  font-size: 0.7rem;
+  color: #555;
+  margin-top: 4px;
+}
+
+/* ---- HARİTA & İLETİŞİM BÖLÜMÜ ---- */
+.harita-iletisim-bolum {
+  padding: 70px 0;
+  background: var(--krem);
+}
+
+.harita-wrapper {
+  width: 100%;
+  height: 380px;
+  border: 2px solid var(--altin);
+  overflow: hidden;
+}
+
+.harita-wrapper iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  filter: grayscale(30%);
+}
+
+.iletisim-kutusu {
+  background: var(--siyah);
+  padding: 40px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid #2a2a2a;
+}
+
+.iletisim-kutusu h3 {
+  font-family: var(--font-baslik);
+  font-size: 2rem;
+  color: var(--altin);
+  font-weight: 300;
+  letter-spacing: 3px;
+  margin-bottom: 16px;
+}
+
+.iletisim-kutusu p {
+  color: #aaa;
+  font-size: 0.88rem;
+  margin-bottom: 10px;
+}
+
+.iletisim-kutusu .bilgi-satiri {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #ccc;
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+}
+
+.iletisim-kutusu .bilgi-satiri i {
+  color: var(--altin);
+  font-size: 1rem;
+  min-width: 20px;
+}
+
+.iletisim-btn-dikkat {
+  display: inline-block;
+  margin-top: 24px;
+  background: var(--altin);
+  color: var(--siyah);
+  font-family: var(--font-metin);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  padding: 14px 30px;
+  text-decoration: none;
+  transition: var(--gecis);
+  border: 2px solid var(--altin);
+  animation: nabiz 2.5s infinite;
+}
+
+.iletisim-btn-dikkat:hover {
+  background: transparent;
+  color: var(--altin);
+}
+
+@keyframes nabiz {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(201,168,76,0); }
+  50%       { box-shadow: 0 0 0 10px rgba(201,168,76,0.25); }
+}
+
+/* ---------- RESPONSİVE DÜZENLEMELER ---------- */
+@media (max-width: 768px) {
+  .navbar-kuyumcu .navbar-brand {
+    font-size: 1.3rem;
+  }
+
+  .page-header-band {
+    padding: 40px 0 30px;
+  }
+
+  .urun-karti .kart-gorsel {
+    height: 200px;
+  }
+}

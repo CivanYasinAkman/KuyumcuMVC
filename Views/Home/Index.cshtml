@@ -1,0 +1,270 @@
+﻿@{
+    ViewData["Title"] = "Ana Sayfa";
+}
+
+<section id="heroSlider" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4000">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#heroSlider" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slayt 1"></button>
+        <button type="button" data-bs-target="#heroSlider" data-bs-slide-to="1" aria-label="Slayt 2"></button>
+        <button type="button" data-bs-target="#heroSlider" data-bs-slide-to="2" aria-label="Slayt 3"></button>
+    </div>
+
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <div class="slide-bg slide-bg-1"></div>
+            <div class="slide-icerik">
+                <span class="kucuk-yazi">Yeni Koleksiyon 2026</span>
+                <h2>Zarafetin <em>Altın</em><br>Yüzyılı</h2>
+                <p>El işçiliğiyle hazırlanan, zamansız tasarımlar. Her parça, bir hikâyenin sessiz anlatıcısı.</p>
+                <div class="btn-grup">
+                    <a asp-controller="Home" asp-action="Urunler" class="btn-altin">Koleksiyonu Keşfet</a>
+                    <a asp-controller="Home" asp-action="Fiyatlar" class="btn-koyu">Canlı Fiyatlar</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="carousel-item">
+            <div class="slide-bg slide-bg-2"></div>
+            <div class="slide-icerik">
+                <span class="kucuk-yazi">Özel Tasarım</span>
+                <h2>22 Ayar <em>Altın</em><br>Bilezikler</h2>
+                <p>Geleneksel motifler, modern çizgilerle buluşuyor. Annenize, sevgilinize, kendinize…</p>
+                <div class="btn-grup">
+                    <a asp-controller="Home" asp-action="Urunler" class="btn-altin">Bilezikleri Gör</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="carousel-item">
+            <div class="slide-bg slide-bg-3"></div>
+            <div class="slide-icerik">
+                <span class="kucuk-yazi">Güvenilir Alışveriş</span>
+                <h2>30 Yıllık<br><em>Güven</em> ve Kalite</h2>
+                <p>Mersin'de 1994'ten bu yana hizmetinizdeyiz. Güncel fiyatlar, şeffaf alışveriş.</p>
+                <div class="btn-grup">
+                    <a asp-controller="Home" asp-action="Iletisim" class="btn-altin">Bize Ulaşın</a>
+                    <a asp-controller="Home" asp-action="Fiyatlar" class="btn-koyu">Bugünün Fiyatları</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#heroSlider" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Önceki</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#heroSlider" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Sonraki</span>
+    </button>
+</section>
+
+<div class="hero-alt-cizgi">
+    <span>✦</span>
+    <span class="vurgu">El İşçiliği</span>
+    <span>✦</span>
+    <span class="vurgu">22 & 14 Ayar</span>
+    <span>✦</span>
+    <span class="vurgu">Şeffaf Fiyat</span>
+    <span>✦</span>
+    <span class="vurgu">1994'ten Beri</span>
+    <span>✦</span>
+</div>
+
+<section class="vitrin-bolum">
+    <div class="container">
+        <p class="bolum-alt-yazi fade-in-up">Seçkin Parçalar</p>
+        <h2 class="bolum-baslik fade-in-up delay-1">Günün Vitrine Çıkanları</h2>
+        <div class="altin-divider fade-in-up delay-2"></div>
+        <p class="text-center text-muted mb-5 fade-in-up delay-3" style="font-size:0.88rem; max-width:500px; margin:0 auto 40px;">
+            Her gün özenle seçilmiş parçalarımızla tanışın.
+        </p>
+
+        <div class="row g-4">
+            <div class="col-sm-6 col-lg-3 fade-in-up delay-1">
+                <div class="vitrin-karti h-100">
+                    <div style="height:200px; background:linear-gradient(135deg,#f5edd8,#e8d08a); display:flex; align-items:center; justify-content:center;">
+                        <img src="/img/urunler/3.jpg" style="width: 100%; height: 100%; object-fit: cover;" alt="Burma Bilezik" />
+                    </div>
+                    <div class="vitrin-icerik">
+                        <p style="font-size:0.65rem;letter-spacing:3px;color:var(--altin);text-transform:uppercase;margin-bottom:4px;">Bilezik</p>
+                        <h5 style="font-family:var(--font-baslik);font-size:1.2rem;margin-bottom:6px;">Burma Bilezik</h5>
+                        <p style="font-size:0.8rem;color:var(--gri);margin-bottom:12px;">22 Ayar · 7.2 gr</p>
+                        <a asp-controller="Home" asp-action="Urunler" class="btn-altin" style="font-size:0.65rem;padding:8px 20px;">İncele</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-3 fade-in-up delay-2">
+                <div class="vitrin-karti h-100">
+                    <div style="height:200px; background:linear-gradient(135deg,#f0f0f0,#d4c9a8); display:flex; align-items:center; justify-content:center;">
+                        <img src="/img/urunler/11.jpg" style="width: 100%; height: 100%; object-fit: cover;" alt="Solitaire Pırlanta" />
+                    </div>
+                    <div class="vitrin-icerik">
+                        <p style="font-size:0.65rem;letter-spacing:3px;color:var(--altin);text-transform:uppercase;margin-bottom:4px;">Yüzük</p>
+                        <h5 style="font-family:var(--font-baslik);font-size:1.2rem;margin-bottom:6px;">Solitaire Pırlanta</h5>
+                        <p style="font-size:0.8rem;color:var(--gri);margin-bottom:12px;">14 Ayar · 0.50 ct</p>
+                        <a asp-controller="Home" asp-action="Urunler" class="btn-altin" style="font-size:0.65rem;padding:8px 20px;">İncele</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-3 fade-in-up delay-3">
+                <div class="vitrin-karti h-100">
+                    <div style="height:200px; background:linear-gradient(135deg,#fffbf0,#c9a84c40); display:flex; align-items:center; justify-content:center;">
+                        <img src="/img/urunler/12.jpg" style="width: 100%; height: 100%; object-fit: cover;" alt="Venezia Zincir" />
+                    </div>
+                    <div class="vitrin-icerik">
+                        <p style="font-size:0.65rem;letter-spacing:3px;color:var(--altin);text-transform:uppercase;margin-bottom:4px;">Kolye</p>
+                        <h5 style="font-family:var(--font-baslik);font-size:1.2rem;margin-bottom:6px;">Venezia Zincir</h5>
+                        <p style="font-size:0.8rem;color:var(--gri);margin-bottom:12px;">22 Ayar · 5.4 gr</p>
+                        <a asp-controller="Home" asp-action="Urunler" class="btn-altin" style="font-size:0.65rem;padding:8px 20px;">İncele</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-3 fade-in-up delay-4">
+                <div class="vitrin-karti h-100">
+                    <div style="height:200px; background:linear-gradient(135deg,#fff8ee,#e8d08a60); display:flex; align-items:center; justify-content:center;">
+                        <img src="/img/urunler/4.jpg" style="width: 100%; height: 100%; object-fit: cover;" alt="Damla Küpe" />
+                    </div>
+                    <div class="vitrin-icerik">
+                        <p style="font-size:0.65rem;letter-spacing:3px;color:var(--altin);text-transform:uppercase;margin-bottom:4px;">Küpe</p>
+                        <h5 style="font-family:var(--font-baslik);font-size:1.2rem;margin-bottom:6px;">Damla Küpe</h5>
+                        <p style="font-size:0.8rem;color:var(--gri);margin-bottom:12px;">14 Ayar · 2.8 gr</p>
+                        <a asp-controller="Home" asp-action="Urunler" class="btn-altin" style="font-size:0.65rem;padding:8px 20px;">İncele</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-5">
+            <a asp-controller="Home" asp-action="Urunler" class="btn-koyu">Tüm Koleksiyonu Görüntüle</a>
+        </div>
+    </div>
+</section>
+
+<section class="fiyat-ozet-bolum">
+    <div class="container">
+        <p class="bolum-alt-yazi fade-in-up" style="color:#555;">Güncel Veriler</p>
+        <h2 class="bolum-baslik fade-in-up delay-1">Altın & Döviz Özeti</h2>
+        <div class="altin-divider fade-in-up delay-2"></div>
+        <p class="text-center mb-5 fade-in-up delay-3" style="color:#666;font-size:0.82rem;letter-spacing:1px;">
+            Aşağıdaki fiyatlar bilgi amaçlıdır. Gerçek zamanlı fiyatlar için mağazamızı arayınız.
+        </p>
+
+        <div class="row g-3 mb-5">
+            <div class="col-6 col-md-4 col-lg-2 fade-in-up delay-1">
+                <div class="fiyat-mini-kart">
+                    <p class="fiyat-adi">Gram Altın</p>
+                    <p class="fiyat-deger">3.842</p>
+                    <p class="fiyat-birim">TL / Satış</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2 fade-in-up delay-2">
+                <div class="fiyat-mini-kart">
+                    <p class="fiyat-adi">Çeyrek Altın</p>
+                    <p class="fiyat-deger">6.320</p>
+                    <p class="fiyat-birim">TL / Satış</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2 fade-in-up delay-3">
+                <div class="fiyat-mini-kart">
+                    <p class="fiyat-adi">Yarım Altın</p>
+                    <p class="fiyat-deger">12.580</p>
+                    <p class="fiyat-birim">TL / Satış</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2 fade-in-up delay-1">
+                <div class="fiyat-mini-kart">
+                    <p class="fiyat-adi">Tam Altın</p>
+                    <p class="fiyat-deger">25.100</p>
+                    <p class="fiyat-birim">TL / Satış</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2 fade-in-up delay-2">
+                <div class="fiyat-mini-kart">
+                    <p class="fiyat-adi">USD / TL</p>
+                    <p class="fiyat-deger">38,42</p>
+                    <p class="fiyat-birim">Dolar Kuru</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2 fade-in-up delay-3">
+                <div class="fiyat-mini-kart">
+                    <p class="fiyat-adi">EUR / TL</p>
+                    <p class="fiyat-deger">41,75</p>
+                    <p class="fiyat-birim">Euro Kuru</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <a asp-controller="Home" asp-action="Fiyatlar" class="btn-altin">
+                <i class="bi bi-graph-up me-2"></i>
+                Tüm Piyasa Fiyatları İçin Tıklayın
+            </a>
+        </div>
+    </div>
+</section>
+
+<section class="harita-iletisim-bolum">
+    <div class="container">
+        <p class="bolum-alt-yazi fade-in-up">Neredeyiz?</p>
+        <h2 class="bolum-baslik fade-in-up delay-1">Bizi Ziyaret Edin</h2>
+        <div class="altin-divider fade-in-up delay-2"></div>
+
+        <div class="row g-0 mt-5">
+            <div class="col-lg-7 fade-in-up delay-2">
+                <div class="harita-wrapper">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3185.234567890!2d34.6415!3d36.8121!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14274e4f6a73df5b%3A0x46d0c756d59c5a27!2sMersin%20Merkez!5e0!3m2!1str!2str!4v1700000000000!5m2!1str!2str" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Altın Dünya Kuyumculuk Konum Haritası"></iframe>
+                </div>
+            </div>
+
+            <div class="col-lg-5 fade-in-up delay-3">
+                <div class="iletisim-kutusu">
+                    <h3>Bize Ulaşın</h3>
+                    <p>Sorularınız, özel sipariş talepleriniz veya randevu için aşağıdaki bilgilerden bize ulaşabilirsiniz.</p>
+
+                    <div class="bilgi-satiri">
+                        <i class="bi bi-geo-alt-fill"></i>
+                        <span>Çankaya Cad. No:14, Akdeniz, Mersin</span>
+                    </div>
+                    <div class="bilgi-satiri">
+                        <i class="bi bi-telephone-fill"></i>
+                        <span>0324 321 45 67</span>
+                    </div>
+                    <div class="bilgi-satiri">
+                        <i class="bi bi-clock-fill"></i>
+                        <span>Pzt – Cmt: 09:00 – 19:30</span>
+                    </div>
+                    <div class="bilgi-satiri">
+                        <i class="bi bi-envelope-fill"></i>
+                        <span>info@altindunya.com.tr</span>
+                    </div>
+
+                    <a asp-controller="Home" asp-action="Iletisim" class="iletisim-btn-dikkat">
+                        <i class="bi bi-chat-dots-fill me-2"></i>
+                        İletişim Bilgileri ve Form İçin Tıklayın
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Slider elementini buluyoruz
+            var sliderElement = document.getElementById('heroSlider');
+            
+            if (sliderElement) {
+                // Bootstrap 5 motoruna slider'ı 4 saniyede bir döndürmesini emrediyoruz
+                new bootstrap.Carousel(sliderElement, {
+                    interval: 4000,
+                    ride: 'carousel',
+                    wrap: true
+                });
+            }
+        });
+    </script>
+}
