@@ -4,7 +4,7 @@
 
 @section Scripts {
     <style>
-        /* CSS kuralları - @@ kaçışları ile düzenlendi */
+        /* CSS kuralları - Tasarımın birebir korundu */
         .tablo-kart { border: 1px solid #e8e0d0; background: var(--beyaz); overflow: hidden; margin-bottom: 40px; }
         .tablo-kart .tablo-baslik-satiri { background: var(--siyah); padding: 18px 24px; display: flex; align-items: center; gap: 12px; border-bottom: 2px solid var(--altin); }
         .tablo-kart .tablo-baslik-satiri h4 { font-family: var(--font-baslik); color: var(--altin); font-size: 1.3rem; letter-spacing: 3px; text-transform: uppercase; margin: 0; font-weight: 400; }
@@ -18,6 +18,10 @@
         .piyasa-bilgi-kart .pb-adi { font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; color: #555; margin-top: 6px; }
         .piyasa-bilgi-kart .pb-degisim { font-size: 0.78rem; margin-top: 6px; font-weight: 500; }
         .tablo-responsive-wrapper { overflow-x: auto; }
+        
+        /* Dinamik renk sınıfları */
+        .deger-yukari { color: #2E7D32 !important; font-weight: 500; }
+        .deger-asagi { color: #C62828 !important; font-weight: 500; }
     </style>
 }
 
@@ -29,7 +33,7 @@
     <div class="d-flex justify-content-center mt-3">
         <div class="guncelleme-etiketi">
             <span class="nokta"></span>
-            <span>Son Güncelleme: <span id="saatGoster">--:--</span></span>
+            <span>Son Güncelleme: <span id="saatGoster">--:--:--</span></span>
             <span>·</span>
             <span>Bilgi Amaçlıdır</span>
         </div>
@@ -39,10 +43,10 @@
 <main style="background:var(--krem);padding:60px 0;">
     <div class="container">
         <div class="row g-3 mb-5">
-            <div class="col-6 col-md-3"><div class="piyasa-bilgi-kart"><div class="pb-ikon">🥇</div><div class="pb-deger">3.842</div><div class="pb-adi">Gram Altın (TL)</div><div class="pb-degisim" style="color:#2E7D32;">▲ +%0.34</div></div></div>
-            <div class="col-6 col-md-3"><div class="piyasa-bilgi-kart"><div class="pb-ikon">💵</div><div class="pb-deger">38.42</div><div class="pb-adi">USD / TL</div><div class="pb-degisim" style="color:#C62828;">▼ -0.12</div></div></div>
-            <div class="col-6 col-md-3"><div class="piyasa-bilgi-kart"><div class="pb-ikon">💶</div><div class="pb-deger">41.75</div><div class="pb-adi">EUR / TL</div><div class="pb-degisim" style="color:#2E7D32;">▲ +0.08</div></div></div>
-            <div class="col-6 col-md-3"><div class="piyasa-bilgi-kart"><div class="pb-ikon">🥈</div><div class="pb-deger">44.80</div><div class="pb-adi">Gram Gümüş (TL)</div><div class="pb-degisim" style="color:#2E7D32;">▲ +%0.21</div></div></div>
+            <div class="col-6 col-md-3"><div class="piyasa-bilgi-kart"><div class="pb-ikon">🥇</div><div class="pb-deger" id="kart-gram-altin">...</div><div class="pb-adi">Gram Altın (TL)</div><div class="pb-degisim" id="kart-gram-altin-degisim" style="color:#2E7D32;">...</div></div></div>
+            <div class="col-6 col-md-3"><div class="piyasa-bilgi-kart"><div class="pb-ikon">💵</div><div class="pb-deger" id="kart-usd">...</div><div class="pb-adi">USD / TL</div><div class="pb-degisim" id="kart-usd-degisim" style="color:#C62828;">...</div></div></div>
+            <div class="col-6 col-md-3"><div class="piyasa-bilgi-kart"><div class="pb-ikon">💶</div><div class="pb-deger" id="kart-eur">...</div><div class="pb-adi">EUR / TL</div><div class="pb-degisim" id="kart-eur-degisim" style="color:#2E7D32;">...</div></div></div>
+            <div class="col-6 col-md-3"><div class="piyasa-bilgi-kart"><div class="pb-ikon">🥈</div><div class="pb-deger" id="kart-gumus">...</div><div class="pb-adi">Gram Gümüş (TL)</div><div class="pb-degisim" id="kart-gumus-degisim" style="color:#2E7D32;">...</div></div></div>
         </div>
 
         <div class="tablo-kart">
@@ -51,13 +55,13 @@
                 <table class="altin-tablo">
                     <thead><tr><th>Altın Türü</th><th>Alış (TL)</th><th>Satış (TL)</th><th>Gram</th><th>Ayar</th><th>Değişim</th></tr></thead>
                     <tbody>
-                        <tr><td><strong>Gram Altın</strong></td><td>3.815</td><td><strong>3.842</strong></td><td>1 gr</td><td>24 Ayar</td><td class="deger-yukari">▲ +%0.34</td></tr>
-                        <tr><td><strong>Çeyrek Altın</strong></td><td>6.287</td><td><strong>6.320</strong></td><td>1.608 gr</td><td>22 Ayar</td><td class="deger-yukari">▲ +%0.28</td></tr>
-                        <tr><td><strong>Yarım Altın</strong></td><td>12.520</td><td><strong>12.580</strong></td><td>3.217 gr</td><td>22 Ayar</td><td class="deger-yukari">▲ +%0.30</td></tr>
-                        <tr><td><strong>Tam Altın</strong></td><td>24.980</td><td><strong>25.100</strong></td><td>6.435 gr</td><td>22 Ayar</td><td class="deger-yukari">▲ +%0.31</td></tr>
-                        <tr><td><strong>Ata Altın</strong></td><td>25.100</td><td><strong>25.250</strong></td><td>6.435 gr</td><td>22 Ayar</td><td class="deger-asagi">▼ -0.05</td></tr>
-                        <tr><td><strong>Beşli Altın</strong></td><td>124.500</td><td><strong>125.200</strong></td><td>32.175 gr</td><td>22 Ayar</td><td class="deger-yukari">▲ +%0.29</td></tr>
-                        <tr><td><strong>Reşat Altın</strong></td><td>26.200</td><td><strong>26.400</strong></td><td>6.435 gr</td><td>22 Ayar</td><td class="deger-yukari">▲ +%0.35</td></tr>
+                        <tr><td><strong>Gram Altın</strong></td><td id="ga-alis">...</td><td><strong id="ga-satis">...</strong></td><td>1 gr</td><td>24 Ayar</td><td id="ga-degisim" class="deger-yukari">...</td></tr>
+                        <tr><td><strong>Çeyrek Altın</strong></td><td id="ca-alis">...</td><td><strong id="ca-satis">...</strong></td><td>1.608 gr</td><td>22 Ayar</td><td id="ca-degisim" class="deger-yukari">...</td></tr>
+                        <tr><td><strong>Yarım Altın</strong></td><td id="ya-alis">...</td><td><strong id="ya-satis">...</strong></td><td>3.217 gr</td><td>22 Ayar</td><td id="ya-degisim" class="deger-yukari">...</td></tr>
+                        <tr><td><strong>Tam Altın</strong></td><td id="ta-alis">...</td><td><strong id="ta-satis">...</strong></td><td>6.435 gr</td><td>22 Ayar</td><td id="ta-degisim" class="deger-yukari">...</td></tr>
+                        <tr><td><strong>Ata Altın</strong></td><td id="ata-alis">...</td><td><strong id="ata-satis">...</strong></td><td>6.435 gr</td><td>22 Ayar</td><td id="ata-degisim" class="deger-asagi">...</td></tr>
+                        <tr><td><strong>Beşli Altın</strong></td><td id="ba-alis">...</td><td><strong id="ba-satis">...</strong></td><td>32.175 gr</td><td>22 Ayar</td><td id="ba-degisim" class="deger-yukari">...</td></tr>
+                        <tr><td><strong>Reşat Altın</strong></td><td id="res-alis">...</td><td><strong id="res-satis">...</strong></td><td>6.435 gr</td><td>22 Ayar</td><td id="res-degisim" class="deger-yukari">...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -69,11 +73,11 @@
                 <table class="altin-tablo">
                     <thead><tr><th>Ayar</th><th>Alış</th><th>Satış</th><th>Saflık</th><th>Kullanım</th><th>Değişim</th></tr></thead>
                     <tbody>
-                        <tr><td><strong>24 Ayar</strong></td><td>3.815</td><td><strong>3.842</strong></td><td>%99.9</td><td>Yatırım</td><td class="deger-yukari">▲ +%0.34</td></tr>
-                        <tr><td><strong>22 Ayar</strong></td><td>3.490</td><td><strong>3.512</strong></td><td>%91.6</td><td>Bilezik</td><td class="deger-yukari">▲ +%0.31</td></tr>
-                        <tr><td><strong>18 Ayar</strong></td><td>2.858</td><td><strong>2.876</strong></td><td>%75.0</td><td>Pırlanta</td><td class="deger-yukari">▲ +%0.28</td></tr>
-                        <tr><td><strong>14 Ayar</strong></td><td>2.224</td><td><strong>2.238</strong></td><td>%58.5</td><td>Alyans</td><td class="deger-asagi">▼ -0.02</td></tr>
-                        <tr><td><strong>8 Ayar</strong></td><td>1.272</td><td><strong>1.280</strong></td><td>%33.3</td><td>Dekoratif</td><td class="deger-yukari">▲ +%0.15</td></tr>
+                        <tr><td><strong>24 Ayar</strong></td><td id="a24-alis">...</td><td><strong id="a24-satis">...</strong></td><td>%99.9</td><td>Yatırım</td><td id="a24-degisim" class="deger-yukari">...</td></tr>
+                        <tr><td><strong>22 Ayar</strong></td><td id="a22-alis">...</td><td><strong id="a22-satis">...</strong></td><td>%91.6</td><td>Bilezik</td><td id="a22-degisim" class="deger-yukari">...</td></tr>
+                        <tr><td><strong>18 Ayar</strong></td><td id="a18-alis">...</td><td><strong id="a18-satis">...</strong></td><td>%75.0</td><td>Pırlanta</td><td id="a18-degisim" class="deger-yukari">...</td></tr>
+                        <tr><td><strong>14 Ayar</strong></td><td id="a14-alis">...</td><td><strong id="a14-satis">...</strong></td><td>%58.5</td><td>Alyans</td><td id="a14-degisim" class="deger-asagi">...</td></tr>
+                        <tr><td><strong>8 Ayar</strong></td><td id="a8-alis">...</td><td><strong id="a8-satis">...</strong></td><td>%33.3</td><td>Dekoratif</td><td id="a8-degisim" class="deger-yukari">...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -85,11 +89,11 @@
                 <table class="altin-tablo">
                     <thead><tr><th>Döviz</th><th>Alış</th><th>Satış</th><th>Önceki</th><th>Yüksek</th><th>Düşük</th><th>Değişim</th></tr></thead>
                     <tbody>
-                        <tr><td><strong>USD — ABD Doları</strong></td><td>38.36</td><td><strong>38.42</strong></td><td>38.54</td><td>38.68</td><td>38.30</td><td class="deger-asagi">▼ -0.12</td></tr>
-                        <tr><td><strong>EUR — Euro</strong></td><td>41.68</td><td><strong>41.75</strong></td><td>41.67</td><td>41.90</td><td>41.58</td><td class="deger-yukari">▲ +0.08</td></tr>
-                        <tr><td><strong>GBP — İngiliz Sterlini</strong></td><td>48.90</td><td><strong>49.05</strong></td><td>48.82</td><td>49.20</td><td>48.75</td><td class="deger-yukari">▲ +0.23</td></tr>
-                        <tr><td><strong>CHF — İsviçre Frangı</strong></td><td>43.20</td><td><strong>43.38</strong></td><td>43.15</td><td>43.55</td><td>43.05</td><td class="deger-yukari">▲ +0.23</td></tr>
-                        <tr><td><strong>SAR — Suudi Riyali</strong></td><td>10.22</td><td><strong>10.28</strong></td><td>10.25</td><td>10.32</td><td>10.18</td><td class="deger-asagi">▼ -0.03</td></tr>
+                        <tr><td><strong>USD — ABD Doları</strong></td><td id="usd-alis">...</td><td><strong id="usd-satis">...</strong></td><td id="usd-onceki">...</td><td id="usd-yuksek">...</td><td id="usd-dusuk">...</td><td id="usd-degisim" class="deger-asagi">...</td></tr>
+                        <tr><td><strong>EUR — Euro</strong></td><td id="eur-alis">...</td><td><strong id="eur-satis">...</strong></td><td id="eur-onceki">...</td><td id="eur-yuksek">...</td><td id="eur-dusuk">...</td><td id="eur-degisim" class="deger-yukari">...</td></tr>
+                        <tr><td><strong>GBP — İngiliz Sterlini</strong></td><td id="gbp-alis">...</td><td><strong id="gbp-satis">...</strong></td><td id="gbp-onceki">...</td><td id="gbp-yuksek">...</td><td id="gbp-dusuk">...</td><td id="gbp-degisim" class="deger-yukari">...</td></tr>
+                        <tr><td><strong>CHF — İsviçre Frangı</strong></td><td id="chf-alis">...</td><td><strong id="chf-satis">...</strong></td><td id="chf-onceki">...</td><td id="chf-yuksek">...</td><td id="chf-dusuk">...</td><td id="chf-degisim" class="deger-yukari">...</td></tr>
+                        <tr><td><strong>SAR — Suudi Riyali</strong></td><td id="sar-alis">...</td><td><strong id="sar-satis">...</strong></td><td id="sar-onceki">...</td><td id="sar-yuksek">...</td><td id="sar-dusuk">...</td><td id="sar-degisim" class="deger-asagi">...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -101,9 +105,9 @@
                 <table class="altin-tablo">
                     <thead><tr><th>Tür</th><th>Alış</th><th>Satış</th><th>Birim</th><th>Değişim</th></tr></thead>
                     <tbody>
-                        <tr><td><strong>Gram Gümüş</strong></td><td>44.60</td><td><strong>44.80</strong></td><td>1 gram</td><td class="deger-yukari">▲ +%0.21</td></tr>
-                        <tr><td><strong>Ons Gümüş</strong></td><td>1.385</td><td><strong>1.392</strong></td><td>31.1 gram</td><td class="deger-yukari">▲ +%0.18</td></tr>
-                        <tr><td><strong>Gümüş 925</strong></td><td>41.25</td><td><strong>41.45</strong></td><td>1 gram</td><td class="deger-yukari">▲ +%0.19</td></tr>
+                        <tr><td><strong>Gram Gümüş</strong></td><td id="g-gram-alis">...</td><td><strong id="g-gram-satis">...</strong></td><td>1 gram</td><td id="g-gram-degisim" class="deger-yukari">...</td></tr>
+                        <tr><td><strong>Ons Gümüş</strong></td><td id="g-ons-alis">...</td><td><strong id="g-ons-satis">...</strong></td><td>31.1 gram</td><td id="g-ons-degisim" class="deger-yukari">...</td></tr>
+                        <tr><td><strong>Gümüş 925</strong></td><td id="g-925-alis">...</td><td><strong id="g-925-satis">...</strong></td><td>1 gram</td><td id="g-925-degisim" class="deger-yukari">...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -117,10 +121,200 @@
 </main>
 
 <script>
-    function saatGuncelle() {
-        var s = new Date();
-        document.getElementById('saatGoster').textContent = s.getHours().toString().padStart(2, '0') + ':' + s.getMinutes().toString().padStart(2, '0') + ':' + s.getSeconds().toString().padStart(2, '0');
+    // ================================================
+    // 1. CANLI PİYASA MOTORU (Hafıza Destekli)
+    // ================================================
+    function canliFiyatlariGetir() {
+        fetch('@Url.Action("GetLivePrices", "Home")')
+            .then(response => response.json())
+            .then(data => {
+                if(data && data.success) {
+                    var kurlar = data.data;
+
+                    // Şimdiki tarih ve saati tam formatta al (Örn: 1.06.2026 17:09:00)
+                    var simdi = new Date();
+                    var tarihSaatStr = simdi.toLocaleDateString('tr-TR') + ' ' + simdi.toLocaleTimeString('tr-TR');
+
+                    // Alınan bu gerçek verileri ve zaman damgasını tarayıcı hafızasına kilitle
+                    localStorage.setItem('kuyumcu_son_kurlar', JSON.stringify(kurlar));
+                    localStorage.setItem('kuyumcu_son_zaman', tarihSaatStr);
+
+                    // Tabloyu ve üst kartları gerçek verilerle doldur
+                    tabloyuVerilerleBesle(kurlar);
+
+                    // Üstteki bildirim bandını "Canlı" moduna al
+                    durumSeridiniGuncelle(true, tarihSaatStr);
+                } else {
+                    // API bağlandı ama boş veri gönderdiyse hafızaya dön
+                    hafizadakiSonVeriyiYukle();
+                }
+            })
+            .catch(error => {
+                // İnternet kesilirse, CORS engeli çıkarsa veya API çökerse burası çalışır
+                console.log("Canlı fiyatlar çekilemedi, hafızadaki arşiv verileri yükleniyor.");
+                hafizadakiSonVeriyiYukle();
+            });
     }
-    setInterval(saatGuncelle, 1000);
-    saatGuncelle();
+
+    // ================================================
+    // 2. HAFIZADAN ESKİ VERİYİ ÇEKME MOTORU
+    // ================================================
+    function hafizadakiSonVeriyiYukle() {
+        var eskiKurlar = localStorage.getItem('kuyumcu_son_kurlar');
+        var eskiZaman = localStorage.getItem('kuyumcu_son_zaman');
+
+        if (eskiKurlar && eskiZaman) {
+            // Eğer hafızada daha önce kaydedilmiş bir başarılı veri varsa onu bas
+            var kurlarNesnesi = JSON.parse(eskiKurlar);
+            tabloyuVerilerleBesle(kurlarNesnesi);
+
+            // Sitedeki uyarı bandını kırmızı yap ve tam o tarihi söyle
+            durumSeridiniGuncelle(false, eskiZaman);
+        } else {
+            // Eğer site ilk kez açıldıysa ve hafızada hiç veri yoksa taslak veriler kalır
+            durumSeridiniGuncelle(false, "Veri Alınamadı (İnternet Bağlantınızı Kontrol Edin)");
+        }
+    }
+
+    // ================================================
+    // 3. TABLO VE KARTLARI BESLEYEN ORTAK METOD
+    // ================================================
+    function tabloyuVerilerleBesle(kurlar) {
+        // --- 1. DÖVİZ KURLARINI DOLDUR (Yüksek/Düşük dahil) ---
+        function dovizSatiriDoldur(kod, dataObj) {
+            var satis = parseFloat(dataObj.satis);
+            var alis = satis * 0.985;
+            var onceki = parseFloat(dataObj.onceki);
+            
+            // Günlük Yüksek / Düşük Simülasyonu (Alıştan %0.4 düşük, Satıştan %0.5 yüksek)
+            var yuksek = satis * 1.005;
+            var dusuk = alis * 0.996;
+
+            if(document.getElementById(kod + '-alis')) {
+                document.getElementById(kod + '-alis').textContent = alis.toFixed(2);
+                document.getElementById(kod + '-satis').textContent = satis.toFixed(2);
+                document.getElementById(kod + '-onceki').textContent = onceki.toFixed(2);
+                document.getElementById(kod + '-yuksek').textContent = yuksek.toFixed(2);
+                document.getElementById(kod + '-dusuk').textContent = dusuk.toFixed(2);
+                renkliDegisimYaz(kod + '-degisim', dataObj.degisim);
+                
+                // Üstteki kartlar için (Sadece USD ve EUR var)
+                if(document.getElementById('kart-' + kod)) {
+                    document.getElementById('kart-' + kod).textContent = satis.toFixed(2);
+                    renkliDegisimYaz('kart-' + kod + '-degisim', dataObj.degisim);
+                }
+            }
+        }
+
+        dovizSatiriDoldur('usd', kurlar.USD);
+        dovizSatiriDoldur('eur', kurlar.EUR);
+        dovizSatiriDoldur('gbp', kurlar.GBP);
+        dovizSatiriDoldur('chf', kurlar.CHF);
+        dovizSatiriDoldur('sar', kurlar.SAR);
+
+        // --- 2. ALTIN TABLOLARINI DOLDUR ---
+        var gaAlis = parseFloat(kurlar.GA.alis);
+        var gaSatis = parseFloat(kurlar.GA.satis);
+        var aDegisim = kurlar.GA.degisim; // Altın değişimi
+
+        // Gram Altın Üst Kart
+        document.getElementById('kart-gram-altin').textContent = formatPara(gaSatis);
+        renkliDegisimYaz('kart-gram-altin-degisim', aDegisim);
+
+        // Satır Doldurucu Yardımcı Fonksiyon
+        function altinSatir(id, alisC, satisC) {
+            if(document.getElementById(id + '-alis')){
+                document.getElementById(id + '-alis').textContent = formatPara(alisC);
+                document.getElementById(id + '-satis').textContent = formatPara(satisC);
+                renkliDegisimYaz(id + '-degisim', aDegisim);
+            }
+        }
+
+        altinSatir('ga', gaAlis, gaSatis);
+        altinSatir('ca', gaAlis * 1.63, gaSatis * 1.65);
+        altinSatir('ya', gaAlis * 3.26, gaSatis * 3.30);
+        altinSatir('ta', gaAlis * 6.52, gaSatis * 6.60);
+        altinSatir('ata', gaAlis * 6.57, gaSatis * 6.63);
+        altinSatir('ba', gaAlis * 32.6, gaSatis * 33.0);
+        altinSatir('res', gaAlis * 6.8, gaSatis * 6.9);
+
+        // Ham Altın Ayarları
+        altinSatir('a24', gaAlis, gaSatis);
+        altinSatir('a22', gaAlis * 0.916, gaSatis * 0.916);
+        altinSatir('a18', gaAlis * 0.750, gaSatis * 0.750);
+        altinSatir('a14', gaAlis * 0.585, gaSatis * 0.585);
+        altinSatir('a8', gaAlis * 0.333, gaSatis * 0.333);
+
+
+        // --- 3. GÜMÜŞ TABLOSUNU DOLDUR ---
+        var gAlis = parseFloat(kurlar.GUMUS.alis);
+        var gSatis = parseFloat(kurlar.GUMUS.satis);
+        var gOns = parseFloat(kurlar.GUMUS.ons);
+        
+        // Gümüş Üst Kart
+        document.getElementById('kart-gumus').textContent = gSatis.toFixed(2);
+        renkliDegisimYaz('kart-gumus-degisim', kurlar.GUMUS.degisim);
+
+        if(document.getElementById('g-gram-alis')){
+            document.getElementById('g-gram-alis').textContent = gAlis.toFixed(2);
+            document.getElementById('g-gram-satis').textContent = gSatis.toFixed(2);
+            renkliDegisimYaz('g-gram-degisim', kurlar.GUMUS.degisim);
+
+            document.getElementById('g-ons-alis').textContent = (gOns - 0.20).toFixed(2);
+            document.getElementById('g-ons-satis').textContent = gOns.toFixed(2);
+            renkliDegisimYaz('g-ons-degisim', kurlar.GUMUS.degisim);
+
+            document.getElementById('g-925-alis').textContent = (gAlis * 0.925).toFixed(2);
+            document.getElementById('g-925-satis').textContent = (gSatis * 0.925).toFixed(2);
+            renkliDegisimYaz('g-925-degisim', kurlar.GUMUS.degisim);
+        }
+    }
+
+    // Pozitif/Negatif duruma göre Ok ve Renk basan fonksiyon
+    function renkliDegisimYaz(elementId, degisimDegeri) {
+        var el = document.getElementById(elementId);
+        if(!el) return;
+        var deger = parseFloat(degisimDegeri || 0);
+        
+        if(deger > 0) {
+            el.innerHTML = "▲ +%" + deger.toFixed(2);
+            el.className = "deger-yukari";
+            el.style.color = "#2E7D32";
+        } else if(deger < 0) {
+            el.innerHTML = "▼ -%" + Math.abs(deger).toFixed(2);
+            el.className = "deger-asagi";
+            el.style.color = "#C62828";
+        } else {
+            el.innerHTML = "━ %0.00";
+            el.className = "";
+            el.style.color = "#888";
+        }
+    }
+
+    // ================================================
+    // 4. BİLDİRİM ŞERİDİNİ DİNAMİKLEŞTİREN METOD
+    // ================================================
+    function durumSeridiniGuncelle(isLive, zamanMesaji) {
+        var nokta = document.querySelector('.guncelleme-etiketi .nokta');
+        var saatYaziAlani = document.getElementById('saatGoster');
+        
+        if (isLive) {
+            nokta.style.background = "#2E7D32"; // Canlı yeşil nokta
+            saatYaziAlani.parentElement.innerHTML = 'Son Güncelleme: <span id="saatGoster">' + zamanMesaji + '</span>';
+        } else {
+            nokta.style.background = "#C62828"; // Hata uyarısı kırmızı nokta
+            // Tam senin istediğin o net cümleyi buraya gömüyoruz:
+            saatYaziAlani.parentElement.innerHTML = '<span id="saatGoster" style="color:#ff8a80; font-weight:bold;">Bu veriler tam ' + zamanMesaji + ' tarihine ait arşiv verileridir.</span>';
+        }
+    }
+
+    function formatPara(deger) {
+        return parseFloat(deger).toLocaleString('tr-TR', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+    }
+
+    // Sayfa açıldığında ilk sorguyu at ve her 60 saniyede bir canlığı kontrol et
+    document.addEventListener('DOMContentLoaded', function() {
+        canliFiyatlariGetir();
+        setInterval(canliFiyatlariGetir, 60000); 
+    });
 </script>

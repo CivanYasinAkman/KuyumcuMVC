@@ -2,15 +2,6 @@
 @{
     ViewData["Title"] = Model.UrunAdi + " Detayı";
 
-    // Kategoriye göre emoji belirleme
-    string emoji = "✨";
-    if (Model.KategoriID == 1) emoji = "🔗"; // Bilezik
-    else if (Model.KategoriID == 2) emoji = "💍"; // Yüzük
-    else if (Model.KategoriID == 3) emoji = "💑"; // Alyans
-    else if (Model.KategoriID == 4) emoji = "👑"; // Set
-    else if (Model.KategoriID == 5) emoji = "⭐"; // Küpe
-    else if (Model.KategoriID == 6) emoji = "💎"; // Kolye
-
     // Veritabanındaki ayarlara göre tahmini gramaj fiyatı
     double altinFiyati = 3500; 
     if (Model.Ayar == 22) altinFiyati = 3840;
@@ -341,6 +332,145 @@
             margin-top: 30px;
         }
     }
+
+    /* ---- ÜRÜN KARTLARI STİLLERİ (Popüler Ürünler İçin) ---- */
+    .urun-kart-wrapper {
+        overflow: hidden;
+        position: relative;
+        background: var(--beyaz);
+        border: 1px solid #e8e0d0;
+        transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.3s ease;
+        margin-bottom: 30px;
+    }
+
+    .urun-kart-wrapper:hover {
+        transform: translateY(-8px) scale(1.01);
+        box-shadow: 0 20px 50px rgba(0,0,0,0.14), 0 0 0 1px var(--altin);
+        border-color: var(--altin);
+    }
+
+    .urun-kart-gorsel {
+        position: relative;
+        height: 220px;
+        overflow: hidden;
+        background: #f5edd8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .urun-rozet {
+        position: absolute;
+        top: 14px;
+        left: 14px;
+        background: var(--siyah);
+        color: var(--altin);
+        font-size: 0.6rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        padding: 5px 10px;
+        z-index: 2;
+    }
+
+    .urun-kart-gorsel .overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(10,10,10,0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 1;
+    }
+
+    .urun-kart-wrapper:hover .overlay {
+        opacity: 1;
+    }
+
+    .overlay .hizli-incele {
+        background: transparent;
+        border: 1px solid var(--altin);
+        color: var(--altin);
+        font-family: var(--font-metin);
+        font-size: 0.65rem;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        padding: 10px 22px;
+        text-decoration: none;
+        transform: translateY(10px);
+        transition: all 0.3s ease 0.1s;
+    }
+
+    .urun-kart-wrapper:hover .overlay .hizli-incele {
+        transform: translateY(0);
+    }
+
+    .overlay .hizli-incele:hover {
+        background: var(--altin);
+        color: var(--siyah);
+    }
+
+    .urun-kart-bilgi {
+        padding: 20px 22px;
+        border-top: 1px solid #f0ebe0;
+        background: var(--beyaz);
+    }
+
+    .urun-kart-bilgi .kategori {
+        font-size: 0.62rem;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: var(--altin);
+        margin-bottom: 5px;
+    }
+
+    .urun-kart-bilgi .isim {
+        font-family: var(--font-baslik);
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--siyah);
+        margin-bottom: 4px;
+        line-height: 1.3;
+    }
+
+    .urun-kart-bilgi .aciklama {
+        font-size: 0.78rem;
+        color: var(--gri);
+        margin-bottom: 14px;
+    }
+
+    .urun-kart-bilgi .alt-satir {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .urun-kart-bilgi .fiyat {
+        font-family: var(--font-baslik);
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--altin-koyu);
+    }
+
+    .btn-detay {
+        font-family: var(--font-metin);
+        font-size: 0.62rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        padding: 8px 18px;
+        border: 1px solid var(--siyah);
+        background: transparent;
+        color: var(--siyah);
+        text-decoration: none;
+        transition: var(--gecis);
+        display: inline-block;
+    }
+
+    .btn-detay:hover {
+        background: var(--siyah);
+        color: var(--altin);
+    }
 </style>
 
 <div class="iz-kirintisi">
@@ -601,7 +731,7 @@
                 <div class="urun-kart-wrapper">
                     <div class="urun-kart-gorsel" style="background:linear-gradient(135deg,#fffbf0,#c9a84c30);height:200px;">
                         <span class="urun-rozet">Bilezik</span>
-                        <div class="emoji-gorsel" style="font-size:4rem;">🔗</div>
+                        <img src="/img/urunler/6.jpg" style="width: 100%; height: 100%; object-fit: cover;" alt="Hasır Bilezik" />
                         <div class="overlay">
                             <a asp-controller="Home" asp-action="Detay" asp-route-id="6" class="hizli-incele">İncele</a>
                         </div>
@@ -621,7 +751,7 @@
                 <div class="urun-kart-wrapper">
                     <div class="urun-kart-gorsel" style="background:linear-gradient(135deg,#f8f5ec,#d4c580);height:200px;">
                         <span class="urun-rozet">Bilezik</span>
-                        <div class="emoji-gorsel" style="font-size:4rem;">⭕</div>
+                        <img src="/img/urunler/8.jpg" style="width: 100%; height: 100%; object-fit: cover;" alt="Omega Bilezik" />
                         <div class="overlay">
                             <a asp-controller="Home" asp-action="Detay" asp-route-id="8" class="hizli-incele">İncele</a>
                         </div>
@@ -641,7 +771,7 @@
                 <div class="urun-kart-wrapper">
                     <div class="urun-kart-gorsel" style="background:linear-gradient(135deg,#fff8ee,#e8d08a60);height:200px;">
                         <span class="urun-rozet">Küpe</span>
-                        <div class="emoji-gorsel" style="font-size:4rem;">🌟</div>
+                        <img src="/img/urunler/4.jpg" style="width: 100%; height: 100%; object-fit: cover;" alt="Damla Küpe" />
                         <div class="overlay">
                             <a asp-controller="Home" asp-action="Detay" asp-route-id="4" class="hizli-incele">İncele</a>
                         </div>
@@ -661,7 +791,7 @@
                 <div class="urun-kart-wrapper">
                     <div class="urun-kart-gorsel" style="background:linear-gradient(135deg,#fffbf0,#e8d08a50);height:200px;">
                         <span class="urun-rozet">Kolye</span>
-                        <div class="emoji-gorsel" style="font-size:4rem;">✨</div>
+                        <img src="/img/urunler/12.jpg" style="width: 100%; height: 100%; object-fit: cover;" alt="Venezia Zincir" />
                         <div class="overlay">
                             <a asp-controller="Home" asp-action="Detay" asp-route-id="12" class="hizli-incele">İncele</a>
                         </div>

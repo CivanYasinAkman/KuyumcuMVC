@@ -153,50 +153,50 @@
             Aşağıdaki fiyatlar bilgi amaçlıdır. Gerçek zamanlı fiyatlar için mağazamızı arayınız.
         </p>
 
-        <div class="row g-3 mb-5">
-            <div class="col-6 col-md-4 col-lg-2 fade-in-up delay-1">
-                <div class="fiyat-mini-kart">
-                    <p class="fiyat-adi">Gram Altın</p>
-                    <p class="fiyat-deger">3.842</p>
-                    <p class="fiyat-birim">TL / Satış</p>
-                </div>
-            </div>
-            <div class="col-6 col-md-4 col-lg-2 fade-in-up delay-2">
-                <div class="fiyat-mini-kart">
-                    <p class="fiyat-adi">Çeyrek Altın</p>
-                    <p class="fiyat-deger">6.320</p>
-                    <p class="fiyat-birim">TL / Satış</p>
-                </div>
-            </div>
-            <div class="col-6 col-md-4 col-lg-2 fade-in-up delay-3">
-                <div class="fiyat-mini-kart">
-                    <p class="fiyat-adi">Yarım Altın</p>
-                    <p class="fiyat-deger">12.580</p>
-                    <p class="fiyat-birim">TL / Satış</p>
-                </div>
-            </div>
-            <div class="col-6 col-md-4 col-lg-2 fade-in-up delay-1">
-                <div class="fiyat-mini-kart">
-                    <p class="fiyat-adi">Tam Altın</p>
-                    <p class="fiyat-deger">25.100</p>
-                    <p class="fiyat-birim">TL / Satış</p>
-                </div>
-            </div>
-            <div class="col-6 col-md-4 col-lg-2 fade-in-up delay-2">
-                <div class="fiyat-mini-kart">
-                    <p class="fiyat-adi">USD / TL</p>
-                    <p class="fiyat-deger">38,42</p>
-                    <p class="fiyat-birim">Dolar Kuru</p>
-                </div>
-            </div>
-            <div class="col-6 col-md-4 col-lg-2 fade-in-up delay-3">
-                <div class="fiyat-mini-kart">
-                    <p class="fiyat-adi">EUR / TL</p>
-                    <p class="fiyat-deger">41,75</p>
-                    <p class="fiyat-birim">Euro Kuru</p>
-                </div>
-            </div>
+<div class="row g-3 mb-5">
+    <div class="col-6 col-md-4 col-lg-2 fade-in-up delay-1">
+        <div class="fiyat-mini-kart">
+            <p class="fiyat-adi">Gram Altın</p>
+            <p class="fiyat-deger" id="ana-gram-altin">...</p>
+            <p class="fiyat-birim">TL / Satış</p>
         </div>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2 fade-in-up delay-2">
+        <div class="fiyat-mini-kart">
+            <p class="fiyat-adi">Çeyrek Altın</p>
+            <p class="fiyat-deger" id="ana-ceyrek-altin">...</p>
+            <p class="fiyat-birim">TL / Satış</p>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2 fade-in-up delay-3">
+        <div class="fiyat-mini-kart">
+            <p class="fiyat-adi">Yarım Altın</p>
+            <p class="fiyat-deger" id="ana-yarim-altin">...</p>
+            <p class="fiyat-birim">TL / Satış</p>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2 fade-in-up delay-1">
+        <div class="fiyat-mini-kart">
+            <p class="fiyat-adi">Tam Altın</p>
+            <p class="fiyat-deger" id="ana-tam-altin">...</p>
+            <p class="fiyat-birim">TL / Satış</p>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2 fade-in-up delay-2">
+        <div class="fiyat-mini-kart">
+            <p class="fiyat-adi">USD / TL</p>
+            <p class="fiyat-deger" id="ana-usd">...</p>
+            <p class="fiyat-birim">Dolar Kuru</p>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2 fade-in-up delay-3">
+        <div class="fiyat-mini-kart">
+            <p class="fiyat-adi">EUR / TL</p>
+            <p class="fiyat-deger" id="ana-eur">...</p>
+            <p class="fiyat-birim">Euro Kuru</p>
+        </div>
+    </div>
+</div>
 
         <div class="text-center">
             <a asp-controller="Home" asp-action="Fiyatlar" class="btn-altin">
@@ -258,13 +258,45 @@
             var sliderElement = document.getElementById('heroSlider');
             
             if (sliderElement) {
-                // Bootstrap 5 motoruna slider'ı 4 saniyede bir döndürmesini emrediyoruz
                 new bootstrap.Carousel(sliderElement, {
                     interval: 4000,
                     ride: 'carousel',
                     wrap: true
                 });
             }
+            
+            // --- YENİ EKLENEN CANLI FİYAT KODLARI ---
+            anaSayfaFiyatlariniCek();
+            setInterval(anaSayfaFiyatlariniCek, 60000); // 1 dakikada bir güncelle
         });
+
+        function anaSayfaFiyatlariniCek() {
+            fetch('@Url.Action("GetLivePrices", "Home")')
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.success) {
+                        var kurlar = data.data;
+
+                        // Rakamları formatlamak için yardımcı fonksiyon
+                        function formatPara(deger) {
+                            return parseFloat(deger).toLocaleString('tr-TR', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+                        }
+
+                        // Dövizleri Doldur
+                        var usdSatis = parseFloat(kurlar.USD.satis || 38.42);
+                        var eurSatis = parseFloat(kurlar.EUR.satis || 41.75);
+                        document.getElementById('ana-usd').textContent = usdSatis.toFixed(2);
+                        document.getElementById('ana-eur').textContent = eurSatis.toFixed(2);
+
+                        // Altınları Doldur (C#'tan gelen Gram Altın satış üzerinden diğerleri hesaplanır)
+                        var gaSatis = parseFloat(kurlar.GA.satis || 3842);
+                        document.getElementById('ana-gram-altin').textContent = formatPara(gaSatis);
+                        document.getElementById('ana-ceyrek-altin').textContent = formatPara(gaSatis * 1.65);
+                        document.getElementById('ana-yarim-altin').textContent = formatPara(gaSatis * 3.30);
+                        document.getElementById('ana-tam-altin').textContent = formatPara(gaSatis * 6.60);
+                    }
+                })
+                .catch(error => console.error("Ana sayfa fiyat güncellenemedi:", error));
+        }
     </script>
 }
